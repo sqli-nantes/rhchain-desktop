@@ -1,0 +1,20 @@
+body, #root, .container {
+  color: black;
+  height: 100vh;
+  background-color: white;
+  font-family: Arial, Helvetica, Helvetica Neue;
+  overflow-y: hidden;
+  margin: 0;
+}
+
+.container {
+  padding:0;
+}
+
+.row {
+	margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
