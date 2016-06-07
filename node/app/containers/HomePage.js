@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Home from '../components/Home';
-import Collaborator from '../components/Collaborator';
-import Modal from '../components/Modal';
 
 
 const styles = {
@@ -15,9 +14,17 @@ export default class HomePage extends Component {
     return (
 		  <div style={styles.root}>
         <Home className="row">
-      			<Collaborator/>
+      			{this.props.children}
   			</Home>
   		</div>
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    date: state.app.date
+  };
+}
+
+export default connect(mapStateToProps)(Home);

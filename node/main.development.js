@@ -7,16 +7,14 @@ if (process.env.NODE_ENV === 'development') {
   require('electron-debug')(); // eslint-disable-line global-require
 }
 
-
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
-
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     show: false,
-    resizable: false,
+    resizable: true,
     width: 500,
     height: 800
   });

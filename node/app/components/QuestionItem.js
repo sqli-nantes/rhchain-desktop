@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import QuestionItemSub from './QuestionItemSub'
-
 const styles = {
 	root: {
     height: "20vh",
@@ -22,7 +20,7 @@ export default class QuestionItem extends Component {
     	<div style={styles.root}>
         <span style={styles.text}>{this.props.text}</span>
         <div style={styles.sub}>
-          <QuestionItemSub />
+          {this.props.children}
         </div>
       </div>
     );

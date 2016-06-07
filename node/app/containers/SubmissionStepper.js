@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { Step, Stepper, StepLabel} from 'material-ui/Stepper';
 
@@ -14,7 +15,7 @@ const styles = {
 export default class SubmissionStepper extends Component {
   render() {
     return (
-  		<Stepper style={styles.root}>
+  		<Stepper activeStep={this.props.step} style={styles.root}>
   			<Step style={styles.step}>
           <StepLabel>Attente choix</StepLabel>
         </Step>  			
@@ -31,3 +32,11 @@ export default class SubmissionStepper extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    step: state.collaborator.step
+  };
+}
+
+export default connect(mapStateToProps)(SubmissionStepper);

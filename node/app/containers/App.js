@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -28,7 +29,7 @@ export default class App extends Component {
             (() => {
               if (process.env.NODE_ENV !== 'production') {
                 const DevTools = require('./DevTools'); // eslint-disable-line global-require
-                //return <DevTools />;
+                return <DevTools />;
               }
             })()
           }

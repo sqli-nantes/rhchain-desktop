@@ -24,7 +24,7 @@ export default class Date extends Component {
     return (
       <Paper  style={styles.paper}
               zDepth={2}>
-        <span style={styles.span}>Juin 2016</span>
+        <span style={styles.span}>{this.props.date}</span>
       </Paper>    
     );
   }

@@ -47,7 +47,7 @@ export default class Login extends Component {
           floatingLabelFocusStyle={styles.input.floatingLabelStyle}  
           underlineStyle={styles.input.underlineStyle}
           underlineFocusStyle={styles.input.underlineStyle}/>
-        <Link className="row" to="/home"> 
+        <Link className="row" to="/home/collab"> 
           <RaisedButton label="Me Connecter" style={styles.button}/>
         </Link>
       </div>
