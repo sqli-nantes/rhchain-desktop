@@ -16,8 +16,9 @@ const styles = {
 
 export default class QuestionList extends Component {
   render() {
-    var questions = this.props.questions.map((question,index) => {
-      var subItem = React.cloneElement(this.props.children,{idxQuestion:index});
+    const { questions, labels } = this.props;
+    var quests = questions.map((question,index) => {
+      var subItem = React.cloneElement(this.props.children,{idxQuestion:index,questions:questions,labels: labels});
       return (
         <QuestionItem text={question.text} key={index}>
           {subItem}
@@ -26,7 +27,7 @@ export default class QuestionList extends Component {
     })
     return (
       <div style={styles.root} > 
-        {questions}
+        {quests}
       </div>
     );
   }
@@ -34,7 +35,8 @@ export default class QuestionList extends Component {
 
 function mapStateToProps(state) {
   return {
-    questions: state.app.questions
+    questions: state.app.questions,
+    labels: state.app.labels
   };
 }
 

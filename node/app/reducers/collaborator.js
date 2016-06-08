@@ -1,11 +1,10 @@
-import { 	SET_ANSWER, SUBMIT_VOTE,
-			VALID_SUBMIT, CLOSE_VALIDATION } from '../actions/collaborator';
+import { SET_ANSWER, VALID_SUBMIT, END_VALID, SHOW_RESULTS } from '../actions/collaborator';
 import {initialRootState} from './app'
 
 
 const initialState = {
 	answers: [],
-	step: 0 /* Zero-based stepper */
+	step: 3 /* Zero-based stepper */
 }
 
 function getInitialState(){
@@ -13,7 +12,6 @@ function getInitialState(){
 	for(var i=0 ; i<initialRootState.questions.length ; i++ ){
 		initialState.answers[i] = -1;
 	}
-	console.log(initialState)
 	return initialState;
 }
 
@@ -25,9 +23,12 @@ export default function collaborator(state = getInitialState(),action){
 				if( ret.answers[ans] == -1 ) return ret;
 			}
 			return Object.assign({},ret,{step: 1});
-		case SUBMIT_VOTE:
 		case VALID_SUBMIT:
-		case CLOSE_VALIDATION:
+			return Object.assign({},state,{step: 2});
+		case END_VALID:
+			return Object.assign({},state,{step: 3});
+		case SHOW_RESULTS:
+			return Object.assign({},state,{step: 4});
 		default: 
 			return state;
 	}

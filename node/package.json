@@ -25,21 +25,24 @@
     "npm": "2.x || 3.x"
   },
   "dependencies": {
+    "bootstrap-grid": "^2.0.1",
+    "chart.js": "^1.1.1",
+    "color": "^0.11.1",
     "css-modules-require-hook": "^4.0.0",
     "electron-debug": "^0.6.0",
     "font-awesome": "^4.6.1",
+    "material-ui": "^0.15.0",
     "postcss": "^5.0.19",
     "react": "^15.0.1",
+    "react-chartjs": "^0.7.3",
     "react-dom": "^15.0.1",
     "react-redux": "^4.4.5",
     "react-router": "^2.2.4",
     "react-router-redux": "^4.0.2",
+    "react-tap-event-plugin": "^1.0.0",
     "redux": "^3.4.0",
     "redux-thunk": "^2.0.1",
     "source-map-support": "^0.4.0",
-    "bootstrap-grid": "^2.0.1",
-    "material-ui": "^0.15.0",
-    "react-tap-event-plugin": "^1.0.0",
     "web3": "^0.17.0-alpha"
   },
   "devDependencies": {

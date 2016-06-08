@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-
 import SocialSentimentSatisfied from 'material-ui/svg-icons/social/sentiment-satisfied';
 import SocialSentimentNeutral from 'material-ui/svg-icons/social/sentiment-neutral';
 import SocialSentimentDissatisfied from 'material-ui/svg-icons/social/sentiment-dissatisfied';
+
+import * as CollaboratorActions from '../actions/collaborator';
 
 const styles = {
 	root:{
@@ -23,13 +26,11 @@ const styles = {
 
 export default class QuestionItemCollaborator extends Component {
 
-
-
   render() {
     const { setAnswer, idxQuestion, answers } = this.props;
 
     return (
-      <div style={styles.root} >
+      <div  style={styles.root} >
 
         <SocialSentimentSatisfied 
           color={answers[idxQuestion] == 0 ? styles.selectedIconColor : styles.iconColor } 
@@ -48,3 +49,15 @@ export default class QuestionItemCollaborator extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    answers: state.collaborator.answers
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(CollaboratorActions, dispatch);
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(QuestionItemCollaborator);

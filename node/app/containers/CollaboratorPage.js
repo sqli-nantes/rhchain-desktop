@@ -2,6 +2,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Collaborator from '../components/Collaborator';
 import * as CollaboratorActions from '../actions/collaborator';
+import * as AppActions from '../actions/app';
 
 function mapStateToProps(state) {
   return {
@@ -11,7 +12,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(CollaboratorActions, dispatch);
+  return bindActionCreators(Object.assign({},CollaboratorActions,AppActions), dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Collaborator);
