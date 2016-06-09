@@ -4,7 +4,7 @@ import {initialRootState} from './app'
 
 const initialState = {
 	answers: [],
-	step: 3 /* Zero-based stepper */
+	step: 0 /* Zero-based stepper */
 }
 
 function getInitialState(){

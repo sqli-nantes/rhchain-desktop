@@ -2,7 +2,7 @@ import { SUBMIT, WAIT } from '../actions/app';
 
 export const initialRootState = {
 	date: "juin 2016",
-	labels: ["très", "moyennement","pas du tout"],
+	labels: ["satisfait","neutre","déçu"],
 	questions: [
 		{
 			text: "Êtes-vous satisfait(e) de l’ambiance de travail au sein de l’agence ?",

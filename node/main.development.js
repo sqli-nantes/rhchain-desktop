@@ -16,7 +16,7 @@ app.on('ready', () => {
     show: false,
     resizable: true,
     width: 500,
-    height: 800
+    height: 900
   });
 
   mainWindow.loadURL(`file://${__dirname}/app/app.html`);

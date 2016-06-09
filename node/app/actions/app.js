@@ -2,6 +2,7 @@ export const SUBMIT = 'SUBMIT';
 export const WAIT = 'WAIT';
 
 
+
 export function submit(submit) {
   return {
     type: SUBMIT,
@@ -15,3 +16,4 @@ export function wait(wait) {
     payload: {mustWait: wait}
   };
 }
+

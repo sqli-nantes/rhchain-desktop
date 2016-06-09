@@ -6,8 +6,8 @@ const options = {
   segmentShowStroke : true,
   segmentStrokeColor : "#fff",
   segmentStrokeWidth : 2,
-  percentageInnerCutout : 20,
-  animation: false
+  animation: false,
+  tooltipTemplate: "<%if (label){%><%=label %>: <%}%><%= value + ' %' %>"
 };
 
 const styles = {
@@ -27,7 +27,7 @@ export default class ResultPie extends React.Component {
     const { labels, results } = this.props;
     var data = initData(labels,results);
     return(
-      <Pie data={data} height={styles.root.height} width={styles.root.width} />
+      <Pie data={data} options={options} height={styles.root.height} width={styles.root.width} redraw generateLegend/>
     );
   }
 
