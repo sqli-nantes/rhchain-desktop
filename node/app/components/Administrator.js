@@ -17,7 +17,8 @@ const styles = {
 	button: {
 		position: "absolute",
 		bottom: "2vh",
-		width: "100vw",
+		width: "50vw",
+		margin: "0 25vw",
 		label:{
 			fontSize: "1.5em",
 			fontWeight: "bold"
@@ -28,9 +29,9 @@ const styles = {
 
 export default class Administrator extends Component {
   render() {
-  	const {submit, validSubmit, wait, endValid, over } = this.props;
-  	console.log(this.props)
-  	var button = over ? null :
+  	const {home, administrator, submit, validSubmit, endValid} = this.props;
+
+  	var button = home.over ? null :
 							  	(<RaisedButton	primary={true} 
 												style={styles.button}
 												labelStyle={styles.button.label}
@@ -40,17 +41,15 @@ export default class Administrator extends Component {
     	<div style={styles.root}>
     	
     		<QuestionList>
-    			<QuestionItemAdministrator/>
+    			<QuestionItemAdministrator />
     		</QuestionList>
 
     		{button}
 
 			<Modal onSubmit={()=>{
-					wait(true);
+					validSubmit();
 					setTimeout(()=>{
-						wait(false);
-						submit(false);
-						endValid();
+						endValid()
 					},3000);
 				}}/>
 		</div>

@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { Step, Stepper, StepLabel} from 'material-ui/Stepper';
 
 const styles = {
-  root: {
-  },
   step: {
     flex: 1,
     fontWeight: ""
@@ -14,6 +12,7 @@ const styles = {
 
 export default class SubmissionStepper extends Component {
   render() {
+    
     return (
   		<Stepper activeStep={this.props.step} style={styles.root}>
   			<Step style={styles.step}>
@@ -32,11 +31,3 @@ export default class SubmissionStepper extends Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    step: state.collaborator.step
-  };
-}
-
-export default connect(mapStateToProps)(SubmissionStepper);

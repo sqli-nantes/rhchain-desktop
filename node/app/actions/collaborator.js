@@ -1,30 +1,41 @@
-export const SET_ANSWER = 'SET_ANSWER';
-export const VALID_SUBMIT = 'VALID_SUBMIT';
-export const END_VALID = 'END_VALID';
-export const SHOW_RESULTS = 'SHOW_RESULTS';
+import { load, cancel } from './home'
 
-export function setAnswer(idxQuestion,idxAnswer) {
-  return {
-    type: SET_ANSWER,
-    payload: {idxQuestion: idxQuestion,idxAnswer: idxAnswer}
+export const ANSWER = 'ANSWER';
+export const HAS_VOTED = 'HAS_VOTED';
+
+
+export function answer(idQuestion,idAnswer) {
+  return { 
+    type: ANSWER,
+    payload: {idQuestion: idQuestion,idAnswer: idAnswer}
   };
 }
+
+export function hasVoted(){
+  return {
+    type: HAS_VOTED
+  };
+}
+
 
 export function validSubmit() {
-  return {
-    type: VALID_SUBMIT
+  return (dispatch,getState) => {
+
+    // get choice
+
+    // sendTransaction 
+
+    // tx minée 
+      // -> dispatch( voteSubmitted )
+
+    dispatch(load(true));
+    
   };
 }
 
-export function endValid() {
-  return {
-    type: END_VALID
-  };
+export function voteSubmitted(){
+  return (dispatch,getState) => {
+    dispatch( hasVoted() );
+    dispatch( cancel() );
+  }
 }
-
-export function showResults() {
-  return {
-    type: SHOW_RESULTS
-  };
-}
-

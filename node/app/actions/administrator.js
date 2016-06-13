@@ -1,23 +1,33 @@
+import { load,receiveClosingTime, cancel } from './home'
+
 export const SET_VISIBILITY = 'SET_VISIBILITY';
 export const VALID_SUBMIT = 'VALID_SUBMIT';
-export const END_VALID = 'END_VALID';
 
-export function setVisibility(idxQuestion,visible) {
+export function setVisibility(idQuestion,visible) {
   return {
     type: SET_VISIBILITY,
-    payload: {idxQuestion: idxQuestion,visible: visible}
+    payload: {idQuestion: idQuestion,visible: visible}
   };
 }
 
 export function validSubmit() {
-  return {
-    type: VALID_SUBMIT
+  return (dispatch,getState) => {
+
+    // get visibilities
+
+    // sendTransaction
+
+    // tx minée
+      // -> dispatch( voteSubmitted )
+
+    dispatch(load(true))
   };
 }
 
 export function endValid() {
-  return {
-    type: END_VALID
+  return (dispatch,getState)=>{
+    dispatch( receiveClosingTime() );
+    dispatch( cancel() )
   };
 }
 

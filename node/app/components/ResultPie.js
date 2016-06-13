@@ -7,6 +7,7 @@ const options = {
   segmentStrokeColor : "#fff",
   segmentStrokeWidth : 2,
   animation: false,
+  percentageInnerCutout: 50,
   tooltipTemplate: "<%if (label){%><%=label %>: <%}%><%= value + ' %' %>"
 };
 
@@ -15,8 +16,7 @@ const styles = {
   root: {
     height: "100",
     width: "200"
-  },
-  pieColor: "#e74c3c"
+  }
 
 };
 
@@ -38,15 +38,13 @@ function initData(labels,data){
   var slices = data.length;
   var step = (90.0/ slices);
   for(var i=0;i<data.length;i++){
-    if( data[i] > 0){
-      var currentColor = Color(styles.pieColor).hsl();
-      currentColor.l = (currentColor.l + step*i) % 90.0;
-      var finalColor = Color(currentColor);
+    if( data[i].value > 0){
+      var label = labels.find((l)=>{return l.id == data[i].answer})
       ret.push({
-        label: labels[i],
-        value: data[i],
-        color: finalColor.hexString(),
-        highlight: finalColor.whiten(1.5).hexString()
+        label: label.value,
+        value: data[i].value,
+        color: label.color,
+        highlight: Color(label.color).whiten(1.5).hexString()
       });
     }
   }

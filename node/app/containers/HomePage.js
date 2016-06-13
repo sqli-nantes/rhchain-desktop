@@ -20,11 +20,3 @@ export default class HomePage extends Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    date: state.app.date
-  };
-}
-
-export default connect(mapStateToProps)(Home);

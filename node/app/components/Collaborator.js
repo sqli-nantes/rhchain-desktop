@@ -15,7 +15,8 @@ const styles = {
 
 	footer: {
 		button: {
-			width: "100vw",
+			width: "50vw",
+			margin: "0 25vw",
 			label:{
 				fontSize: "1.5em",
 				fontWeight: "bold"
@@ -36,48 +37,55 @@ const styles = {
 export default class Collaborator extends Component {
 
 	render() {
-		const {app, collaborator, setAnswer, validSubmit, wait, submit, endValid, showResults} = this.props;
-		var submitButton = collaborator.step < 2 ?
-		(
-			<RaisedButton	primary={true} 
-							style={styles.footer.button}
-							labelStyle={styles.footer.button.label}
-							label="Soumettre"
-							disabled={collaborator.step<1} 
-							onClick={()=>submit(true)}/>
-		) : 
-		(
-			<RaisedButton	primary={true} 
-							style={styles.footer.button}
-							labelStyle={styles.footer.button.label}
-							label="Show results"
-							onClick={showResults}/>
-		);
-		var questionItem = collaborator.step < 4 ? 
-		(
-			<QuestionItemCollaborator/>
-		) : 
-		(
-			<QuestionItemCollaboratorResults />
-		);
+		const {home, collaborator, showResults, submit, validSubmit, voteSubmitted } = this.props;
+
+		var step = 0;
+		if( home.over ) step = 4;
+		else if( collaborator.hasVoted ) step = 3;
+		else if( home.loading ) step = 2;
+		else if( collaborator.canSubmit ) step = 1;
+
+		var disabled = !collaborator.canSubmit
+
+		/* REMOVE */
+		var onClickButton = step == 3 ? showResults : submit ;
+		var buttonLabel = step == 3 ? "Show results" : "Soumettre";
+		var color = step == 3 ? false : true;
+
+
+		var button = step == 4 ? null :		
+										<RaisedButton	
+											primary={color} 
+											style={styles.footer.button}
+											labelStyle={styles.footer.button.label}
+											label={buttonLabel}
+											disabled={disabled} 
+											onClick={onClickButton}/>
+		/*--------*/
+
+
+
+		var questionItem = home.over ? 
+	      <QuestionItemCollaboratorResults/> : 
+	      <QuestionItemCollaborator/> ;
+
 		return (
 			<div style={styles.root}>
-				<QuestionList >
+				<QuestionList>
 					{questionItem}
 				</QuestionList>
 
 				<div style={styles.footer}>
-		    		{submitButton}
-					<SubmissionStepper style={styles.footer.stepper}/>
+					<div className="row">
+	    				{button}
+					</div>
+					<SubmissionStepper step={step} style={styles.footer.stepper}/>
 				</div>
 
 				<Modal onSubmit={()=>{
 					validSubmit();
-					wait(true);
 					setTimeout(()=>{
-						wait(false);
-						submit(false);
-						endValid();
+						voteSubmitted()
 					},3000);
 				}}/>
 			</div>

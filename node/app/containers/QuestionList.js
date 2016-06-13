@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import QuestionItem from '../components/QuestionItem'
+import * as CollaboratorActions from '../actions/collaborator';
 
 const styles = {
   root: {
@@ -10,19 +11,36 @@ const styles = {
     textAlign: "center"
   },
 	item: {
-		width: "100vw"
-	}
+		root: {
+      height: "20vh",
+      marginBottom: "3vh"
+    },
+    text:{
+      height: "30%",
+      fontSize: "1.3em"
+    },
+    sub: {
+      height: "70%"
+    }
+	}  
 }
 
 export default class QuestionList extends Component {
   render() {
-    const { questions, labels } = this.props;
-    var quests = questions.map((question,index) => {
-      var subItem = React.cloneElement(this.props.children,{idxQuestion:index,questions:questions,labels: labels});
+    const { questions } = this.props;
+
+
+    var quests = questions.map((question) => {
+
+      var questionItem = React.cloneElement(this.props.children,{idQuestion: question.id});
+
       return (
-        <QuestionItem text={question.text} key={index}>
-          {subItem}
-        </QuestionItem>
+        <div style={styles.item.root} key={question.id}>
+          <span style={styles.item.text}>{question.text}</span>
+          <div style={styles.item.sub}>
+            {questionItem}
+          </div>
+        </div>
       )
     })
     return (
@@ -35,10 +53,13 @@ export default class QuestionList extends Component {
 
 function mapStateToProps(state) {
   return {
-    questions: state.app.questions,
-    labels: state.app.labels
+    questions: state.home.questions
   };
 }
 
-export default connect(mapStateToProps)(QuestionList);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({},CollaboratorActions), dispatch);
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(QuestionList);
 

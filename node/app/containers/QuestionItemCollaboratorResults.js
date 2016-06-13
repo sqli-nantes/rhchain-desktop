@@ -28,14 +28,23 @@ const styles = {
 export default class QuestionItemCollaboratorResults extends Component {
 
   render() {
-    const { idxQuestion, collaborator, questions, labels } = this.props;
+    const { idQuestion, answers, labels, results } = this.props;
 
-    var answer = <SocialSentimentSatisfied style={styles.icon} color={styles.iconColor}/>
-    if( collaborator.answers[idxQuestion] == 1 ) 
-      answer = <SocialSentimentNeutral style={styles.icon} color={styles.iconColor}/>
-    else if( collaborator.answers[idxQuestion] == 2 ) 
-      answer = <SocialSentimentDissatisfied style={styles.icon} color={styles.iconColor}/>
+    var idAnswer = answers.find((a)=>{return a.idQuestion == idQuestion}).idAnswer;
 
+    if( idAnswer != null ){
+      var answer = <SocialSentimentSatisfied style={styles.icon} color={styles.iconColor}/>
+      if( idAnswer == 1 ) 
+        answer = <SocialSentimentNeutral style={styles.icon} color={styles.iconColor}/>
+      else if( idAnswer == 2 ) 
+        answer = <SocialSentimentDissatisfied style={styles.icon} color={styles.iconColor}/>
+    } else{
+      // Pas de vote pour cette questions
+    }
+
+    var res = results.find((r)=>{return r.question == idQuestion}).values;
+
+    var pie = res != null ? <ResultPie labels={labels} results={res} /> : null;
 
     return (
       <div  style={styles.root} >
@@ -45,7 +54,7 @@ export default class QuestionItemCollaboratorResults extends Component {
             {answer}
           </div>
           <div className="col-xs-6" style={{padding:0,textAlign:"left"}}>
-            <ResultPie labels={labels} results={questions[idxQuestion].answered} />
+            {pie}
           </div>
         </div>
 
@@ -56,8 +65,9 @@ export default class QuestionItemCollaboratorResults extends Component {
 
 function mapStateToProps(state) {
   return {
-    collaborator: state.collaborator,
-    questions: state.app.questions
+    answers: state.collaborator.answers,
+    results: state.home.results,
+    labels: state.home.answersLabel
   };
 }
 

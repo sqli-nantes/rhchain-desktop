@@ -25,23 +25,24 @@ const styles = {
 export default class QuestionItemAdministrator extends Component {
 
   render() {
-    const { idxQuestion, questions, labels, visibility, setVisibility } = this.props;
+    const { idQuestion, visibility, setVisibility, results, labels } = this.props;
 
-    var visibilityIcon = visibility[idxQuestion] ? 
-    (
-      <ActionVisibility style={styles.icon}
-                        onClick={() => setVisibility(idxQuestion,false)}/>
-    ) : 
-    (
-      <ActionVisibilityOff  style={styles.icon}
-                            onClick={() => setVisibility(idxQuestion,true)}/>
-    );
+    var visibleData = visibility.find((v)=>{return v.idQuestion == idQuestion});
+    if( visibleData != null ){
+      var visibilityIcon = visibleData.visible ? 
+        <ActionVisibility style={styles.icon}
+                          onClick={() => setVisibility(idQuestion,false)}/> : 
+        <ActionVisibilityOff  style={styles.icon}
+                              onClick={() => setVisibility(idQuestion,true)}/>
+    }
+
+    var res = results.find((r)=>{return r.question == idQuestion}).values;
 
     return (
       <div className="row" style={styles.root} >
 
       	<div className="col-xs-6" style={{padding:0,textAlign:"right"}}>
-          <ResultPie labels={labels} results={questions[idxQuestion].answered} />
+          <ResultPie labels={labels} results={res} />
       	</div>
 
         <div className="col-xs-6" style={{padding:0,textAlign:"left"}}>
@@ -56,8 +57,8 @@ export default class QuestionItemAdministrator extends Component {
 function mapStateToProps(state) {
   return {
     visibility: state.administrator.visibility,
-    labels: state.app.labels,
-    questions: state.app.questions
+    results: state.home.results,
+    labels: state.home.answersLabel
   };
 }
 

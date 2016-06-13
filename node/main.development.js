@@ -15,7 +15,7 @@ app.on('ready', () => {
   mainWindow = new BrowserWindow({
     show: false,
     resizable: true,
-    width: 500,
+    width: 750,
     height: 900
   });
 
@@ -33,4 +33,5 @@ app.on('ready', () => {
   if (process.env.NODE_ENV === 'development') {
     mainWindow.openDevTools();
   }
+
 });
