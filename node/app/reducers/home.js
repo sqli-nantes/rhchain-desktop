@@ -3,14 +3,15 @@ import { 	SUBMIT, LOAD, CANCEL,
 			FETCH_DATA_STRING, RECEIVE_DATA_STRING,
 			RECEIVE_NEW_RESULTS, 
 			RECEIVE_CLOSING_TIME, 
-			SHOW_RESULTS } from '../actions/home';
+			SHOW_RESULTS,
+			SHOW_INFO, HIDE_INFO } from '../actions/home';
 
 export const initialRootState = {
 	answersLabel: [
 		{
 			id: 0,
 			value: "satisfait",
-			color: "#9CCC65",
+			color: "#9CCC65"
 
 		},
 		{
@@ -87,6 +88,11 @@ export const initialRootState = {
 			]
 		},
 	],
+	info:{
+		opened: false,
+		message: "",
+		color: ""
+	},
 	over: false,
 	hasSubmitted: false,
 	loading: false
@@ -101,29 +107,29 @@ export default function app(state = initialRootState,action){
 		case CANCEL:
 			return Object.assign({},state,{hasSubmitted: false,loading: false});
 
-
-
 		case FETCH_DATA_HASH:
 			return state;
+
 		case RECEIVE_DATA_HASH:
 			return state;
-
-
-
 
 		case FETCH_DATA_STRING:
 			return state;
 		case RECEIVE_DATA_STRING:
 			return state;
 
-
+		case RECEIVE_CLOSING_TIME:
+			console.log(action.payload)
+			return Object.assign({},state,{over: true});
 
 		case RECEIVE_NEW_RESULTS:
-			return state;
+		case SHOW_INFO:
+			console.log(action)
+			return Object.assign({},state,{info: {opened: true,message: action.payload.message,color:action.payload.color}});
+		case HIDE_INFO:
+			return Object.assign({},state,{info: {opened: false,message: "",color:""}});
 
-		case SHOW_RESULTS:
-		case RECEIVE_CLOSING_TIME:
-			return Object.assign({},state,{over: true});
+
 
 		default:
 			return state;

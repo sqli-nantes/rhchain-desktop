@@ -94,11 +94,3 @@
     "webpack-hot-middleware": "^2.10.0"
   }
 }
-
-/* 
-
-sudo npm install --save bootstrap-grid chart.js color css-modules-require-hook electron-debug font-awesome material-ui postcss react react-chartjs react-dom react-redux react-router react-router-redux react-tap-event-plugin redux redux-thunk source-map-support web3
-
-sudo npm install --save-dev asar babel-core babel-eslint babel-loader babel-plugin-add-module-exports babel-plugin-webpack-loaders babel-polyfill babel-preset-es2015 babel-preset-react babel-preset-react-hmre babel-preset-stage-0 babel-register chai chromedriver co-mocha concurrently cross-env css-loader del electron-packager electron-prebuilt electron-rebuild eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-react express extract-text-webpack-plugin fbjs-scripts jsdom json-loader minimist mocha node-libs-browser react-addons-test-utils redux-devtools redux-devtools-dock-monitor redux-devtools-log-monitor redux-logger selenium-webdriver sinon style-loader webpack webpack-dev-middleware webpack-hot-middleware
-
-*/

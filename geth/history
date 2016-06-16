@@ -1,3 +1,30 @@
 personal.listAccounts
 personal.newAccount("toto")
 personal.listAccounts
+eth.coinbase
+eth.getBalance(eth.coinbase)
+miner.start();admin.sleepBlocks(1);miner.stop();
+eth.getBalance(eth.coinbase)
+abi = [{constant: false, inputs: [], name: "getVisibilities", outputs: [{name: "", type: "bool[3]"}], type: "function"}, {constant: true, inputs: [{name: "", type: "uint256"}], name: "answers", outputs: [{name: "", type: "bytes32"}], type: "function"}, {constant: true, inputs: [{name: "", type: "uint256"}], name: "questions", outputs: [{name: "", type: "bytes32"}], type: "function"}, {constant: false, inputs: [], name: "getResults", outputs: [{name: "", type: "int256[3][3]"}], type: "function"}, {constant: true, inputs: [], name: "closed", outputs: [{name: "", type: "bool"}], type: "function"}, {constant: false, inputs: [{name: "_visibilities", type: "bool[3]"}], name: "close", outputs: [], type: "function"}, {constant: false, inputs: [], name: "mySubmission", outputs: [{name: "", type: "uint8[3]"}], type: "function"}, {constant: false, inputs: [{name: "answ", type: "uint8[3]"}], name: "submit", outputs: [], type: "function"}, {inputs: [{name: "quests", type: "bytes32[3]"}, {name: "answ", type: "bytes32[3]"}], type: "constructor"}, {anonymous: false, inputs: [{indexed: false, name: "results", type: "int256[3][3]"}], name: "newResults", type: "event"}, {anonymous: false, inputs: [{indexed: false, name: "results", type: "int256[3][3]"}], name: "over", type: "event"}]
+rhchain = eth.contract(abi).at("0x7e6e4786c3c9808136124b9ef6707ba56ecbc981")
+eth.coinbase
+personal.unlockAccount(eth.coinbase,"toto")
+rhchain
+abi = [{constant: false, inputs: [], name: "getVisibilities", outputs: [{name: "", type: "bool[3]"}], type: "function"}, {constant: true, inputs: [{name: "", type: "uint256"}], name: "answers", outputs: [{name: "", type: "bytes32"}], type: "function"}, {constant: true, inputs: [{name: "", type: "uint256"}], name: "questions", outputs: [{name: "", type: "bytes32"}], type: "function"}, {constant: false, inputs: [], name: "getResults", outputs: [{name: "", type: "int256[3][3]"}], type: "function"}, {constant: true, inputs: [], name: "closed", outputs: [{name: "", type: "bool"}], type: "function"}, {constant: false, inputs: [{name: "_visibilities", type: "bool[3]"}], name: "close", outputs: [], type: "function"}, {constant: false, inputs: [], name: "mySubmission", outputs: [{name: "", type: "uint8[3]"}], type: "function"}, {constant: false, inputs: [{name: "answ", type: "uint8[3]"}], name: "submit", outputs: [], type: "function"}, {inputs: [{name: "quests", type: "bytes32[3]"}, {name: "answ", type: "bytes32[3]"}], type: "constructor"}, {anonymous: false, inputs: [{indexed: false, name: "results", type: "int256[3][3]"}], name: "newResults", type: "event"}, {anonymous: false, inputs: [{indexed: false, name: "results", type: "int256[3][3]"}], name: "over", type: "event"}]
+rhchain = eth.contract(abi).at("0x7e6e4786c3c9808136124b9ef6707ba56ecbc981")
+admin.peers
+admin.addPeer("enode://971ca9180a27188baacabc0f3987503b227019cc7e607be92ae6c01e8e0f78194d95da60a5d2bb959e5dd8c8abab3c0f82f929baca2dedb8ee7fd502afad9e7b@[::]:30305")
+rhchain = eth.contract(abi).at("0x7e6e4786c3c9808136124b9ef6707ba56ecbc981")
+rhchain
+web3.eth.coinbase
+eth.getBalance(eth.coinbase)
+miner.start();admin.sleepBlocks(1);miner.stop()
+eth.getBalance(eth.coinbase)
+eth.coinbase
+eth.getBalance(eth.coinbase)
+miner.start()
+miner.stop()
+eth.getBalance()
+eth.getBalance(eth.coinbase)
+web3.fromWei(eth.getBalance(eth.coinbase),'ether')
+eth.getBalance(eth.coinbase)

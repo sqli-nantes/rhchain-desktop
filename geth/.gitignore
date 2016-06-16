@@ -1,0 +1,6 @@
+chaindata/
+dapp/
+keystore/
+nodes/
+history
+nodekey

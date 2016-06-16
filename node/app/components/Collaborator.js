@@ -37,7 +37,7 @@ const styles = {
 export default class Collaborator extends Component {
 
 	render() {
-		const {home, collaborator, showResults, submit, validSubmit, voteSubmitted } = this.props;
+		const {home, collaborator, submit, validSubmit, voteSubmitted } = this.props;
 
 		var step = 0;
 		if( home.over ) step = 4;
@@ -47,23 +47,14 @@ export default class Collaborator extends Component {
 
 		var disabled = !collaborator.canSubmit
 
-		/* REMOVE */
-		var onClickButton = step == 3 ? showResults : submit ;
-		var buttonLabel = step == 3 ? "Show results" : "Soumettre";
-		var color = step == 3 ? false : true;
 
-
-		var button = step == 4 ? null :		
-										<RaisedButton	
-											primary={color} 
+		var button = step == 4 ? null :	<RaisedButton	
+											primary={true} 
 											style={styles.footer.button}
 											labelStyle={styles.footer.button.label}
-											label={buttonLabel}
+											label="Soumettre"
 											disabled={disabled} 
-											onClick={onClickButton}/>
-		/*--------*/
-
-
+											onClick={submit}/>
 
 		var questionItem = home.over ? 
 	      <QuestionItemCollaboratorResults/> : 
@@ -77,17 +68,12 @@ export default class Collaborator extends Component {
 
 				<div style={styles.footer}>
 					<div className="row">
-	    				{button}
+    					{button}
 					</div>
 					<SubmissionStepper step={step} style={styles.footer.stepper}/>
 				</div>
 
-				<Modal onSubmit={()=>{
-					validSubmit();
-					setTimeout(()=>{
-						voteSubmitted()
-					},3000);
-				}}/>
+				<Modal onSubmit={()=>{validSubmit()}}/>
 			</div>
 		);
 	}

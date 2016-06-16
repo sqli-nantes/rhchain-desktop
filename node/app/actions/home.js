@@ -12,8 +12,13 @@ export const RECEIVE_NEW_RESULTS = 'RECEIVE_NEW_RESULTS';
 
 export const RECEIVE_CLOSING_TIME = 'RECEIVE_CLOSING_TIME';
 
-export const SHOW_RESULTS = 'SHOW_RESULTS';
+export const SHOW_INFO = 'SHOW_INFO';
+export const HIDE_INFO = 'HIDE_INFO';
 
+export const INFO_TYPES = {
+  SUCCESS: "#00ff00",
+  ERROR: "#ff0000"
+}
 
 export function submit() {
   return {
@@ -67,11 +72,20 @@ export function receiveClosingTime() {
   };
 }
 
-export function showResults() {
+export function showInfo(message,type) {
   return {
-    type: SHOW_RESULTS
+    type: SHOW_INFO,
+    payload: {message: message,color:type}
   };
 }
+
+export function hideInfo() {
+  return {
+    type: HIDE_INFO
+  };
+}
+
+
 
 
 

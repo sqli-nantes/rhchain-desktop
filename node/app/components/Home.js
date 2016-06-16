@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 
 import AppBar from 'material-ui/AppBar';
+import Snackbar from 'material-ui/Snackbar';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 import ActionPowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 
@@ -25,11 +26,17 @@ const styles = {
     height: "32px",
     marginRight: "2vw",
     marginTop: "1vh"
+  },
+  snackbar: {
+    textAlign: "center",
+    fontWeight: "bold",
+    backgroundColor: "#ff0000"
   }
 }
 
 export default class Home extends Component {
   render() {
+    const {info,hideInfo} = this.props;
     return (
       <div style={styles.root}>
         <AppBar
@@ -43,9 +50,17 @@ export default class Home extends Component {
             </Link>
           }
           showMenuIconButton={false}
-          zDepth={2}/> 
+          zDepth={2} /> 
 
           {this.props.children}
+
+          <Snackbar
+            open={info.opened}
+            message={info.message}
+            autoHideDuration={4000}
+            onRequestClose={hideInfo}
+            style={styles.snackbar}
+            bodyStyle={styles.snackbar}/>
       </div>
     );
   }
