@@ -49,5 +49,6 @@ export function voteSubmitted(){
   return (dispatch,getState) => {
     dispatch( hasVoted() );
     dispatch( cancel() );
+    dispatch( showInfo("Votre choix a bien été pris en compte",INFO_TYPES.SUCCESS) );
   }
 }

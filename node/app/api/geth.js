@@ -1,6 +1,7 @@
 var Web3 = require('web3');
 var net = require('net');
-var BigNumer = require('bignumber.js')
+var BigNumber = require('bignumber.js')
+BigNumber.config({ERRORS: false});
 
 import ethereumConfig from '../../ethereum.json';
 import * as homeActions from '../actions/home';
@@ -9,18 +10,32 @@ import * as homeActions from '../actions/home';
 function extractMessage(errorObject){
 	return errorObject.message.split(':')[1];
 };
-function extractResultsAndFormat(results){
-    return results.map((question)=>{
+
+
+function formatResults(results){
+    var ret = [];
+    for(var i=0;i<results.length;i++){
+
+        var question = results[i];
+        var answers = [];
         var sum = 0;
-        question.map((answer)=>{
-            sum += new BigNumber(answer).toNumber();
-        });
-        return question.map((answer)=>{
-            return new BigNumber(answer).toNumber()/sum ;
-        })
 
-    });
+        /* compute the number of voters for the question i */
+        for(let j=0;j<question.length;j++){
+            sum+= new BigNumber(question[j]).toNumber();
+        }
 
+        /* for each answer of question i compute the percentage */
+        for(let j=0;j<question.length;j++){
+            var answer = new BigNumber(question[j]).toNumber();
+            var answerPercentage = parseFloat(new BigNumber((answer/sum)*100).toFixed(1));
+            if( answer > 0 ) answers.push(answerPercentage);
+            else answers.push(answer);
+        }
+
+        ret.push(answers);
+    }
+    return ret;
 }
 
 const web3 = new Web3(new Web3.providers.IpcProvider(ethereumConfig.file,net));
@@ -73,18 +88,14 @@ export default {
 
 	eventSubscription(store){
 
-
-
 	    if( ethereumConfig.accountType == "ADMIN" ){
 	        contract.newResults((error,ret) => {
-	            if( !error ){
-                    store.dispatch(homeActions.receiveNewResults(extractResultsAndFormat(ret.args.results)));  
-                } 
+	            if( !error ) store.dispatch(homeActions.receiveNewResults(formatResults(ret.args.results))); 
 	            else store.dispatch(homeActions.showInfo(error.message,homeActions.INFO_TYPES.ERROR));
 	        });
 	    } else{
 	        contract.over((error,ret)=>{
-	            if( !error ) store.dispatch(homeActions.receiveClosingTime(extractResultsAndFormat(ret.args.results)));
+	            if( !error ) store.dispatch(homeActions.receiveClosingTime(formatResults(ret.args.results)));
 	            else store.dispatch(homeActions.showInfo(error.message,homeActions.INFO_TYPES.ERROR));
 	        });
 	    }

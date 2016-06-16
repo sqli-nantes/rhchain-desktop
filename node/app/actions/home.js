@@ -66,9 +66,10 @@ export function receiveNewResults(results) {
   };
 }
 
-export function receiveClosingTime() {
+export function receiveClosingTime(results) {
   return {
-    type: RECEIVE_CLOSING_TIME
+    type: RECEIVE_CLOSING_TIME,
+    payload: {results: results}
   };
 }
 

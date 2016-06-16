@@ -37,6 +37,10 @@ const styles = {
 export default class Home extends Component {
   render() {
     const {info,hideInfo} = this.props;
+
+    var snackbarStyle = styles.snackbar;
+    snackbarStyle.backgroundColor = info.color;
+
     return (
       <div style={styles.root}>
         <AppBar
@@ -59,7 +63,7 @@ export default class Home extends Component {
             message={info.message}
             autoHideDuration={4000}
             onRequestClose={hideInfo}
-            style={styles.snackbar}
+            style={snackbarStyle}
             bodyStyle={styles.snackbar}/>
       </div>
     );

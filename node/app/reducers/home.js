@@ -119,8 +119,14 @@ export default function app(state = initialRootState,action){
 			return state;
 
 		case RECEIVE_CLOSING_TIME:
-			console.log(action.payload)
-			return Object.assign({},state,{over: true});
+			console.log(action)
+
+			var res = action.payload.results.map((question,index)=>{
+				return {question: index,values: question.map((answer,index)=>{
+					return {answer: index,value: answer};
+				})}
+			});
+			return Object.assign({},state,{over: true, results: res});
 
 		case RECEIVE_NEW_RESULTS:
 		case SHOW_INFO:

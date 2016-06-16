@@ -25,15 +25,18 @@ export default class ResultPie extends React.Component {
   render(){
 
     const { labels, results } = this.props;
-    var data = initData(labels,results);
-    return(
-      <Pie data={data} options={options} height={styles.root.height} width={styles.root.width} redraw generateLegend/>
-    );
+    var ret = initDataAndSum(labels,results);
+
+    if( ret.sum > 0 ) 
+      return <Pie data={ret.data} options={options} height={styles.root.height} width={styles.root.width} redraw />
+    else if( ret.sum == 0 ) return <p>Pas de résultats</p>
+    else return <p>Résultats masqués</p>
   }
 
 };
 
-function initData(labels,data){
+function initDataAndSum(labels,data){
+  var sum = 0;
   var ret  = [];
   var slices = data.length;
   var step = (90.0/ slices);
@@ -47,6 +50,7 @@ function initData(labels,data){
         highlight: Color(label.color).whiten(1.5).hexString()
       });
     }
+    sum += data[i].value;
   }
-  return ret;
+  return {data: ret,sum: sum};
 }

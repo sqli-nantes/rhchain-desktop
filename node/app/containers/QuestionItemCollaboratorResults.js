@@ -42,10 +42,8 @@ export default class QuestionItemCollaboratorResults extends Component {
       // Pas de vote pour cette questions
     }
 
-    var res = results.find((r)=>{return r.question == idQuestion}).values;
-
-    var pie = res != null ? <ResultPie labels={labels} results={res} /> : null;
-
+    var res = results.find((r)=>{return r.question == idQuestion});
+    
     return (
       <div  style={styles.root} >
 
@@ -54,7 +52,7 @@ export default class QuestionItemCollaboratorResults extends Component {
             {answer}
           </div>
           <div className="col-xs-6" style={{padding:0,textAlign:"left"}}>
-            {pie}
+            <ResultPie labels={labels} results={res.values} />
           </div>
         </div>
 

@@ -48,7 +48,7 @@ export default class Collaborator extends Component {
 		var disabled = !collaborator.canSubmit
 
 
-		var button = step == 4 ? null :	<RaisedButton	
+		var button = step > 2 ? null :	<RaisedButton	
 											primary={true} 
 											style={styles.footer.button}
 											labelStyle={styles.footer.button.label}
