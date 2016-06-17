@@ -28,3 +28,30 @@ eth.getBalance()
 eth.getBalance(eth.coinbase)
 web3.fromWei(eth.getBalance(eth.coinbase),'ether')
 eth.getBalance(eth.coinbase)
+rhchain
+admin.addPeer("enode://971ca9180a27188baacabc0f3987503b227019cc7e607be92ae6c01e8e0f78194d95da60a5d2bb959e5dd8c8abab3c0f82f929baca2dedb8ee7fd502afad9e7b@[::]:30305")
+abi = [{constant: false, inputs: [], name: "getVisibilities", outputs: [{name: "", type: "bool[3]"}], type: "function"}, {constant: true, inputs: [{name: "", type: "uint256"}], name: "answers", outputs: [{name: "", type: "bytes32"}], type: "function"}, {constant: true, inputs: [{name: "", type: "uint256"}], name: "questions", outputs: [{name: "", type: "bytes32"}], type: "function"}, {constant: false, inputs: [], name: "getResults", outputs: [{name: "", type: "int256[3][3]"}], type: "function"}, {constant: true, inputs: [], name: "closed", outputs: [{name: "", type: "bool"}], type: "function"}, {constant: false, inputs: [{name: "_visibilities", type: "bool[3]"}], name: "close", outputs: [], type: "function"}, {constant: false, inputs: [], name: "mySubmission", outputs: [{name: "", type: "uint8[3]"}], type: "function"}, {constant: false, inputs: [{name: "answ", type: "uint8[3]"}], name: "submit", outputs: [], type: "function"}, {inputs: [{name: "quests", type: "bytes32[3]"}, {name: "answ", type: "bytes32[3]"}], type: "constructor"}, {anonymous: false, inputs: [{indexed: false, name: "results", type: "int256[3][3]"}], name: "newResults", type: "event"}, {anonymous: false, inputs: [{indexed: false, name: "results", type: "int256[3][3]"}], name: "over", type: "event"}]
+rhchain = eth.contract(abi).at("0x7e6e4786c3c9808136124b9ef6707ba56ecbc981")
+rhchain.mySubmission.call()
+rhchain.close.call()
+rhchain.closed.call()
+rhchain.closed
+rhchain.closed()
+rhchain = eth.contract(abi).at("0xcdaac42e8fb197c0d6b8b4759bfe3721f7ed55a2")
+rhchain.mySubmission()
+rhchain.mySubmission.call()
+rhchain.mySubmission()
+rhchain
+rhchain.mySubmission
+rhchain.mySubmission.arguments
+rhchain.mySubmission.call()
+eth.getBalance(eth.coinbase)
+web3.fromWei(eth.getBalance(eth.coinbase),'ether')
+rhchain.submit([0,1,2])
+rhchain.submit.call([0,1,2])
+rhchain.submit.sendTransaction([0,1,2],{from:eth.coinbase,gas:900000})
+rhchain.mySubmission.call()
+rhchain.closed.call()
+abi = [{constant: false, inputs: [], name: "getVisibilities", outputs: [{name: "", type: "bool"}, {name: "", type: "bool[3]"}], type: "function"}, {constant: true, inputs: [{name: "", type: "uint256"}], name: "answers", outputs: [{name: "", type: "bytes32"}], type: "function"}, {constant: true, inputs: [{name: "", type: "uint256"}], name: "questions", outputs: [{name: "", type: "bytes32"}], type: "function"}, {constant: false, inputs: [], name: "getResults", outputs: [{name: "", type: "int256[3][3]"}], type: "function"}, {constant: true, inputs: [], name: "closed", outputs: [{name: "", type: "bool"}], type: "function"}, {constant: false, inputs: [{name: "_visibilities", type: "bool[3]"}], name: "close", outputs: [], type: "function"}, {constant: false, inputs: [], name: "mySubmission", outputs: [{name: "", type: "bool"}, {name: "", type: "uint8[3]"}], type: "function"}, {constant: false, inputs: [{name: "answ", type: "uint8[3]"}], name: "submit", outputs: [], type: "function"}, {inputs: [{name: "quests", type: "bytes32[3]"}, {name: "answ", type: "bytes32[3]"}], type: "constructor"}, {anonymous: false, inputs: [{indexed: false, name: "results", type: "int256[3][3]"}], name: "newResults", type: "event"}, {anonymous: false, inputs: [{indexed: false, name: "results", type: "int256[3][3]"}], name: "over", type: "event"}]
+rhchain = eth.contract(abi).at("0x6505266e12864e08fcb88b30e6b9b4ce4e4ac7ad")
+rhchain.mySubmission.call()

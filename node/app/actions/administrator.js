@@ -1,8 +1,8 @@
-import { load,receiveClosingTime, cancel } from './home'
+import { load, cancel, showInfo, INFO_TYPES, setOver } from './home'
+
+import { closeVote } from '../api/geth'
 
 export const SET_VISIBILITY = 'SET_VISIBILITY';
-export const VALID_SUBMIT = 'VALID_SUBMIT';
-
 export function setVisibility(idQuestion,visible) {
   return {
     type: SET_VISIBILITY,
@@ -10,24 +10,32 @@ export function setVisibility(idQuestion,visible) {
   };
 }
 
+export const VALID_SUBMIT = 'VALID_SUBMIT';
+
 export function validSubmit() {
   return (dispatch,getState) => {
 
-    // get visibilities
-
-    // sendTransaction
-
-    // tx minée
-      // -> dispatch( voteSubmitted )
+    const {administrator} = getState();
+    var visibilities = administrator.visibility;
+    visibilities = visibilities.map((v)=>{return v.visible});
 
     dispatch(load(true))
-  };
-}
 
-export function endValid() {
-  return (dispatch,getState)=>{
-    dispatch( receiveClosingTime() );
-    dispatch( cancel() )
+    var onSuccess = ()=>{
+      dispatch( cancel() );
+      dispatch( setOver(true) );
+      dispatch( showInfo("Vous venez de terminer le vote",INFO_TYPES.SUCCESS) );
+    };
+
+    var onFail = (message)=>{
+      dispatch( cancel() );
+      dispatch( showInfo(message,INFO_TYPES.ERROR) );
+    };
+
+    console.log(typeof closeVote);
+
+    closeVote(visibilities,onSuccess,onFail);
+
   };
 }
 

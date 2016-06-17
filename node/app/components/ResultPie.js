@@ -25,12 +25,14 @@ export default class ResultPie extends React.Component {
   render(){
 
     const { labels, results } = this.props;
-    var ret = initDataAndSum(labels,results);
+    if( results ){
+      var ret = initDataAndSum(labels,results);
 
-    if( ret.sum > 0 ) 
-      return <Pie data={ret.data} options={options} height={styles.root.height} width={styles.root.width} redraw />
-    else if( ret.sum == 0 ) return <p>Pas de résultats</p>
-    else return <p>Résultats masqués</p>
+      if( ret.sum > 0 ) 
+        return <Pie data={ret.data} options={options} height={styles.root.height} width={styles.root.width} redraw />
+      else if( ret.sum < 0 ) return <p>Résultats masqués</p>
+    }
+    return <p>Pas de résultats</p> 
   }
 
 };

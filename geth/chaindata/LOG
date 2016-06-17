@@ -182,3 +182,36 @@
 15:28:30.390697 table@compaction committed F~ S-1MiB Ke·0 D·52662 T·345.299156ms
 15:28:30.391713 table@remove removed @34
 15:28:30.392291 table@remove removed @33
+=============== Jun 17, 2016 (CEST) ===============
+09:12:32.326771 db@close closing
+09:12:32.357520 db@close done T·30.748296ms
+=============== Jun 17, 2016 (CEST) ===============
+09:13:14.477438 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+09:13:14.500063 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.03]
+09:13:14.500081 db@open opening
+09:13:14.500125 journal@recovery F·1
+09:13:14.500833 journal@recovery recovering @37
+09:13:14.829893 memdb@flush created L0@41 N·31704 S·1MiB "\x00\x05\xcb..Dp\xab,v113286":"\xff\xdbF..A\x1bE,v93217"
+09:13:14.834870 version@stat F·[1 2] S·4MiB[1MiB 2MiB] Sc·[0.25 0.03]
+09:13:14.862385 db@janitor F·5 G·0
+09:13:14.862430 db@open done T·362.32277ms
+09:13:14.914711 db@close closing
+09:13:14.914787 db@close done T·75.172µs
+=============== Jun 17, 2016 (CEST) ===============
+09:13:14.994325 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+09:13:14.994442 version@stat F·[1 2] S·4MiB[1MiB 2MiB] Sc·[0.25 0.03]
+09:13:14.994451 db@open opening
+09:13:14.994484 journal@recovery F·1
+09:13:15.000424 journal@recovery recovering @42
+09:13:15.003640 version@stat F·[1 2] S·4MiB[1MiB 2MiB] Sc·[0.25 0.03]
+09:13:15.003848 db@janitor F·5 G·0
+09:13:15.003865 db@open done T·9.40663ms
+10:36:32.941051 table@compaction L0·1 -> L1·2 S·4MiB Q·123677
+10:36:34.113133 table@build created L1@46 N·23850 S·2MiB "\x00\x05\xcb..Dp\xab,v113286":"blo..der,v115914"
+10:36:34.638581 table@build created L1@47 N·24396 S·2MiB "blo..-td,v115912":"\xbe\xb7\x8b..5\x89I,v19693"
+10:36:34.788785 table@build created L1@48 N·3898 S·490KiB "\xbe\xc0\xb6..\x8f7\xe8,v20691":"\xff\xfa\xdc.. Y\x1c,v11555"
+10:36:34.788837 version@stat F·[0 3] S·4MiB[0B 4MiB] Sc·[0.00 0.05]
+10:36:35.014126 table@compaction committed F~ S-353KiB Ke·0 D·17808 T·1.971010239s
+10:36:35.054919 table@remove removed @41
+10:36:35.099471 table@remove removed @39
+10:36:35.099635 table@remove removed @40

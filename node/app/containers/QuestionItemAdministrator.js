@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import Color from 'color';
+
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import ActionVisibility from 'material-ui/svg-icons/action/visibility';
 import ActionVisibilityOff from 'material-ui/svg-icons/action/visibility-off';
@@ -18,25 +20,36 @@ const styles = {
   icon: {
     height: "64px",
     width: "64px",
-    margin: "0 5vw"
+    margin: "0 5vw",
+    color: "#000000"
   },
 }
 
 export default class QuestionItemAdministrator extends Component {
 
   render() {
-    const { idQuestion, visibility, setVisibility, results, labels } = this.props;
+    const { idQuestion, visibility, setVisibility, results, labels, over } = this.props;
 
     var visibleData = visibility.find((v)=>{return v.idQuestion == idQuestion});
     if( visibleData != null ){
-      var visibilityIcon = visibleData.visible ? 
-        <ActionVisibility style={styles.icon}
-                          onClick={() => setVisibility(idQuestion,false)}/> : 
-        <ActionVisibilityOff  style={styles.icon}
-                              onClick={() => setVisibility(idQuestion,true)}/>
+      var visibilityIcon; 
+      if( visibleData.visible ){
+        var visibilityIconAction = over ? ()=>setVisibility(idQuestion,false) : null;
+        var visibilityIconColor = over ? Color(iconColor).lighten(0.5).hexString() : styles.icon.color;
+        visibilityIcon = <ActionVisibility  style={styles.icon}
+                                            onClick={visibilityIconAction}
+                                            color={visibilityIconColor}/>
+      }
+      else {
+        var visibilityIconAction = over ? ()=>setVisibility(idQuestion,true) : null;
+        visibilityIcon = <ActionVisibilityOff style={styles.icon}
+                                              onClick={visibilityIconAction}
+                                              color={visibilityIconColor}/>
+      }
     }
 
-    var res = results.find((r)=>{return r.question == idQuestion}).values;
+    var res = results.find((r)=>{return r.question == idQuestion});
+    res = res ? res.values : null;
 
     return (
       <div className="row" style={styles.root} >
@@ -56,6 +69,7 @@ export default class QuestionItemAdministrator extends Component {
 
 function mapStateToProps(state) {
   return {
+    over: state.home.over,
     visibility: state.administrator.visibility,
     results: state.home.results,
     labels: state.home.answersLabel

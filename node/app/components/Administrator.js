@@ -46,12 +46,7 @@ export default class Administrator extends Component {
 
     		{button}
 
-			<Modal onSubmit={()=>{
-					validSubmit();
-					setTimeout(()=>{
-						endValid()
-					},3000);
-				}}/>
+			<Modal onSubmit={()=>{validSubmit()}}/>
 		</div>
     );
   }

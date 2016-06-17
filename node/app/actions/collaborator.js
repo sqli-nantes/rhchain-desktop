@@ -2,10 +2,9 @@ import { load, cancel, showInfo, INFO_TYPES } from './home'
 
 import { submitAnswers } from '../api/geth'
 
+
+
 export const ANSWER = 'ANSWER';
-export const HAS_VOTED = 'HAS_VOTED';
-
-
 export function answer(idQuestion,idAnswer) {
 
   return (dispatch,getState)=>{ 
@@ -18,6 +17,7 @@ export function answer(idQuestion,idAnswer) {
   };
 }
 
+export const HAS_VOTED = 'HAS_VOTED';
 export function hasVoted(){
   return {
     type: HAS_VOTED
@@ -37,6 +37,7 @@ export function validSubmit() {
       dispatch(voteSubmitted())
     };
     var onFail = (message)=>{
+      console.log("submit failed ",message)
       dispatch(cancel());
       dispatch(showInfo(message,INFO_TYPES.ERROR));
     };

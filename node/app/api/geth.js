@@ -5,13 +5,13 @@ BigNumber.config({ERRORS: false});
 
 import ethereumConfig from '../../ethereum.json';
 import * as homeActions from '../actions/home';
+import * as administratorActions from '../actions/administrator';
+import * as collaboratorActions from '../actions/collaborator';
 
 
-function extractMessage(errorObject){
-	return errorObject.message.split(':')[1];
-};
+function extractMessage(errorObject){return errorObject.message.split(':')[1];};
 
-
+/* Convert from number of voters to percentage */
 function formatResults(results){
     var ret = [];
     for(var i=0;i<results.length;i++){
@@ -38,69 +38,137 @@ function formatResults(results){
     return ret;
 }
 
-const web3 = new Web3(new Web3.providers.IpcProvider(ethereumConfig.file,net));
-const contract = web3.eth.contract(ethereumConfig.contractAbi).at(ethereumConfig.contractAddress);
-const GAS = 900000;
+function showError(store,errorMsg){
+    store.dispatch(homeActions.showInfo(errorMsg,homeActions.INFO_TYPES.ERROR));
+}
+
+function waitMining(txHash, onSuccess , onFail){
+    var filter = web3.eth.filter("latest").watch(function(errWatch,blockHash){
+
+        if( errWatch ){ 
+            console.log(errWatch); 
+            onFail(extractMessage(errWatch));
+            return;
+        }
+
+        var transactions = web3.eth.getBlock(blockHash,function(errBlock,block){
+
+            if( errBlock ){
+                console.log(errBlock);
+                onFail(extractMessage(errBlock));
+                return;
+            } 
+
+            if( block.transactions.indexOf(txHash) == -1 ) return;
+
+            onSuccess();
+
+            filter.stopWatching();
+        });
+    });
+}
+
+export const web3 = new Web3(new Web3.providers.IpcProvider(ethereumConfig.file,net));
+export const contract = web3.eth.contract(ethereumConfig.contractAbi).at(ethereumConfig.contractAddress);
+export const GAS = 900000;
 
 
-export default {
+export function submitAnswers(answers, onSuccess, onFail){
+    web3.eth.getCoinbase((errCb,coinbase)=>{
+          
+    	if( errCb ){
+    		console.log(errCb);
+    		onFail(extractMessage(errCb));
+    		return;
+    	}
 
-	web3,
- 	contract,
+    	contract.submit.sendTransaction(answers,{from:coinbase,gas:GAS},function(errTx,txHash){
+            waitMining(txHash,onSuccess, onFail)
+    	});
+    });
+}
 
-	submitAnswers(answers, onSuccess, onFail){
-		web3.eth.getCoinbase((errCb,coinbase)=>{
-		      
-			if( errCb ){
-				console.log(errCb);
-				onFail(extractMessage(errCb));
-				return;
-			}
+export function eventSubscription(store){
 
-			contract.submit.sendTransaction(answers,{from:coinbase,gas:GAS},function(errTx,txHash){
+    if( ethereumConfig.accountType == "ADMIN" ){
+        contract.newResults((error,ret) => {
+            if( !error ){
+                store.dispatch(homeActions.receiveNewResults(formatResults(ret.args.results))); 
+                store.dispatch(homeActions.showInfo("Le sondage vient d'être répondu",homeActions.INFO_TYPES.SUCCESS));
+            }
+            else showError(store,error.message);
+        });
+    } else{
+        contract.over((error,ret)=>{
+            if( !error ){
+                store.dispatch(homeActions.receiveNewResults(formatResults(ret.args.results)));
+                store.dispatch(homeActions.setOver(true));
+            } 
+            else showError(store,error.message);
+        });
+    }
+}
 
-				var filter = web3.eth.filter("latest").watch(function(errWatch,blockHash){
+export function initializeState(store){
+    contract.closed((err,res)=>{
+        if( !err ) store.dispatch(homeActions.setOver(res));
+        else showError(store,extractMessage(err));
+    });
 
-					if( errWatch ){ 
-						console.log(errWatch); 
-						onFail(extractMessage(errWatch));
-						return;
-					}
+    // question + answer hash
+    // question + answer string
 
-					var transactions = web3.eth.getBlock(blockHash,function(errBlock,block){
+    if( ethereumConfig.accountType == "ADMIN" ){
+        contract.getVisibilities.call((err,value)=>{
+            if( !err && value[0] ){
+                value[1].map((questionVisibility,index)=>{
+                    store.dispatch(administratorActions.setVisibility(index,questionVisibility));
+                });
+            } else { 
+               var msg = err ? extractMessage(err) : "Impossible de récupérer une information (accès refusé)";
+               showError(store,msg);
+            }
+        }); 
 
-						if( errBlock ){
-							console.log(errBlock);
-							onFail(extractMessage(errBlock));
-							return;
-						} 
+        contract.getResults.call((err,value)=>{
+            if( err ){
+              showError(store,extractMessage(err));
+              return;  
+            } 
+            if( value[0] ) store.dispatch(homeActions.receiveNewResults(formatResults(value[1])));
+        });
 
-						if( block.transactions.indexOf(txHash) == -1 ) return;
+    } else{
+        contract.mySubmission.call((err,value)=>{
+            if( err ){
+              showError(store,extractMessage(err));
+              return;  
+            } 
+            if( value[0] ){
+                value[1].map((questionAnswer,index)=>{
+                    store.dispatch(collaboratorActions.answer(index,questionAnswer));
+                });
+                store.dispatch(collaboratorActions.hasVoted());
+            }
+        });
+    }
+}
 
-						onSuccess();
+export function closeVote(visibilities,onSuccess,onFail){
 
-						filter.stopWatching();
-					});
-				});
-			})
-	    });
-	},
+    web3.eth.getCoinbase((errCb,coinbase)=>{
+          
+        if( errCb ){
+            console.log(errCb);
+            onFail(extractMessage(errCb));
+            return;
+        }
 
-	eventSubscription(store){
-
-	    if( ethereumConfig.accountType == "ADMIN" ){
-	        contract.newResults((error,ret) => {
-	            if( !error ) store.dispatch(homeActions.receiveNewResults(formatResults(ret.args.results))); 
-	            else store.dispatch(homeActions.showInfo(error.message,homeActions.INFO_TYPES.ERROR));
-	        });
-	    } else{
-	        contract.over((error,ret)=>{
-	            if( !error ) store.dispatch(homeActions.receiveClosingTime(formatResults(ret.args.results)));
-	            else store.dispatch(homeActions.showInfo(error.message,homeActions.INFO_TYPES.ERROR));
-	        });
-	    }
-	}
-};
+        contract.close.sendTransaction(visibilities,{from:coinbase,gas:GAS},function(errTx,txHash){
+            waitMining(txHash, onSuccess, onFail)
+        });
+    });
+}
 
 /*
 
@@ -109,6 +177,11 @@ Questions :
 Réponses : 
 ["0x910ef7ea438885df31719697a6f71372f16381791e7ba4533dd3df07686e54f6","0x41e2723e115c71a7045d3b1fae971320655b5209b6084bedea3dfd6ff5681efe","0x3bebf25073e42779969fe7d39279c4e0e1af9b3a5d83d30b46af408cad562643"]
 
+
+rhchain = eth.contract(compiled.RHChain.info.abiDefinition).new(["0xd6d82d1d3657312dc08d2108b09029bb501f8cdab6b6bbe7b9408b13d9ced6e7","0x887d8df6aaf3010c9eefed46e2ad03e7b411e84b7f37edd9af0dab6cc29cf257","0x926ef6616a951b0d880385dd2a65850a0b50eb1edc180310ed22b821172e2b10"],["0x910ef7ea438885df31719697a6f71372f16381791e7ba4533dd3df07686e54f6","0x41e2723e115c71a7045d3b1fae971320655b5209b6084bedea3dfd6ff5681efe","0x3bebf25073e42779969fe7d39279c4e0e1af9b3a5d83d30b46af408cad562643"],{from: eth.coinbase, data: compiled.RHChain.code, gas: 2000000})
+
+
+[{"constant": false, "inputs": [], "name": "getVisibilities", "outputs": [{"name": "", "type": "bool"}, {"name": "", "type": "bool[3]"}], "type": "function"}, {"constant": true, "inputs": [{"name": "", "type": "uint256"}], "name": "answers", "outputs": [{"name": "", "type": "bytes32"}], "type": "function"}, {"constant": true, "inputs": [{"name": "", "type": "uint256"}], "name": "questions", "outputs": [{"name": "", "type": "bytes32"}], "type": "function"}, {"constant": false, "inputs": [], "name": "getResults", "outputs": [{"name": "", "type": "bool"}, {"name": "", "type": "int256[3][3]"}], "type": "function"}, {"constant": true, "inputs": [], "name": "closed", "outputs": [{"name": "", "type": "bool"}], "type": "function"}, {"constant": false, "inputs": [{"name": "_visibilities", "type": "bool[3]"}], "name": "close", "outputs": [{"name": "", "type": "bool"}], "type": "function"}, {"constant": false, "inputs": [], "name": "mySubmission", "outputs": [{"name": "", "type": "bool"}, {"name": "", "type": "uint8[3]"}], "type": "function"}, {"constant": false, "inputs": [{"name": "answ", "type": "uint8[3]"}], "name": "submit", "outputs": [{"name": "", "type": "bool"}], "type": "function"}, {"inputs": [{"name": "quests", "type": "bytes32[3]"}, {"name": "answ", "type": "bytes32[3]"}], "type": "constructor"}, {"anonymous": false, "inputs": [{"indexed": false, "name": "results", "type": "int256[3][3]"}], "name": "newResults", "type": "event"}, {"anonymous": false, "inputs": [{"indexed": false, "name": "results", "type": "int256[3][3]"}], "name": "over", "type": "event"}]
 
 
 contract RHChain {
@@ -149,7 +222,7 @@ contract RHChain {
         answers = answ;
     }
     
-    function submit(uint8[3] answ) onlyOpened onlyCollab onlyOnce {
+    function submit(uint8[3] answ) onlyOpened onlyCollab onlyOnce returns(bool){
         
         if( !isSubmissionValid(answ) ) throw;
         
@@ -161,28 +234,30 @@ contract RHChain {
         }
         
         newResults(results);
+        return true;
     }
     
-    function close(bool[3] _visibilities) onlyAdmin onlyOpened {
+    function close(bool[3] _visibilities) onlyAdmin onlyOpened returns(bool){
         visibilities = _visibilities;
         closed = true;
         over(resultsWithVisibilityFilter());
+        return true;
     }
     
-    function mySubmission() onlyCollab returns(uint8[3]) {
+    function mySubmission() returns(bool,uint8[3]) {
         if( msg.sender == admin ) throw;
         if( !hasSubmitted[msg.sender] ) throw;
-        else return submissions[msg.sender];
+        else return (true,submissions[msg.sender]);
     }
     
-    function getResults() returns( int[3][3] ){
-        if( msg.sender == admin ) return results;
-        else if( closed ) return resultsWithVisibilityFilter();
+    function getResults() returns(bool, int[3][3] ){
+        if( msg.sender == admin ) return (true,results);
+        else if( closed ) return (true,resultsWithVisibilityFilter());
         else throw;
     }
     
-    function getVisibilities() onlyAdmin returns( bool[3] )  {
-        return visibilities;
+    function getVisibilities() onlyAdmin returns(bool, bool[3] )  {
+        return (true,visibilities);
     }
     
     function isSubmissionValid(uint8[3] sub) private returns (bool){
@@ -203,5 +278,8 @@ contract RHChain {
     }
 
 }
+
+
+
 
 */

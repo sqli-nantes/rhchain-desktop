@@ -1,5 +1,5 @@
 import { SET_VISIBILITY, VALID_SUBMIT, END_VALID } from '../actions/administrator';
-import {initialRootState} from './home'
+import { initialRootState } from './home'
 
 const initialState = {
 	visibility: [] /* {idQuestion,visible} */
