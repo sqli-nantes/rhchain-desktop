@@ -8,13 +8,12 @@ import ContentClear from 'material-ui/svg-icons/content/clear';
 const styles={
 
   root: {
-    backgroundColor: "#f44336",
+    backgroundColor: "#0A0A0A",
     height: "100%",
     textAlign: "center",
     paddingTop: "30vh",
-    color: "white"
+    color: "#967D4D"
   },
-
 
   title: {
     fontSize: "3em",
@@ -26,6 +25,9 @@ const styles={
     display: "block",
     width: "50vw",
     margin: "2vh 25vw",
+    password: {
+      color: "#967D4D"
+    },
     floatingLabelStyle: {
       color: "#ffffff"
     },
@@ -60,6 +62,7 @@ export default class Login extends Component {
         <span style={styles.title} >RH Chain</span>
 
         <TextField 
+          className="input-password"
           ref="passwordInput"
           floatingLabelText="Mot de passe"
           type="password" 
@@ -67,9 +70,11 @@ export default class Login extends Component {
           floatingLabelFocusStyle={styles.input.floatingLabelStyle}  
           underlineStyle={styles.input.underlineStyle}
           underlineFocusStyle={styles.input.underlineStyle}
-          style={styles.input}/>
+          style={styles.input}
+          inputStyle={styles.input.password}/>
         
         <RaisedButton 
+                      primary={true}
                       label="Me Connecter"
                       labelColor={styles.button.color} 
                       style={styles.button} 
@@ -78,6 +83,7 @@ export default class Login extends Component {
         <span>ou</span>   
 
         <RaisedButton
+                      primary={true}
                       label="Créer un compte" 
                       style={styles.button} 
                       labelColor={styles.button.color} 

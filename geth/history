@@ -55,3 +55,36 @@ rhchain.closed.call()
 abi = [{constant: false, inputs: [], name: "getVisibilities", outputs: [{name: "", type: "bool"}, {name: "", type: "bool[3]"}], type: "function"}, {constant: true, inputs: [{name: "", type: "uint256"}], name: "answers", outputs: [{name: "", type: "bytes32"}], type: "function"}, {constant: true, inputs: [{name: "", type: "uint256"}], name: "questions", outputs: [{name: "", type: "bytes32"}], type: "function"}, {constant: false, inputs: [], name: "getResults", outputs: [{name: "", type: "int256[3][3]"}], type: "function"}, {constant: true, inputs: [], name: "closed", outputs: [{name: "", type: "bool"}], type: "function"}, {constant: false, inputs: [{name: "_visibilities", type: "bool[3]"}], name: "close", outputs: [], type: "function"}, {constant: false, inputs: [], name: "mySubmission", outputs: [{name: "", type: "bool"}, {name: "", type: "uint8[3]"}], type: "function"}, {constant: false, inputs: [{name: "answ", type: "uint8[3]"}], name: "submit", outputs: [], type: "function"}, {inputs: [{name: "quests", type: "bytes32[3]"}, {name: "answ", type: "bytes32[3]"}], type: "constructor"}, {anonymous: false, inputs: [{indexed: false, name: "results", type: "int256[3][3]"}], name: "newResults", type: "event"}, {anonymous: false, inputs: [{indexed: false, name: "results", type: "int256[3][3]"}], name: "over", type: "event"}]
 rhchain = eth.contract(abi).at("0x6505266e12864e08fcb88b30e6b9b4ce4e4ac7ad")
 rhchain.mySubmission.call()
+admin.peers
+abi = [{"constant": false, "inputs": [], "name": "getVisibilities", "outputs": [{"name": "", "type": "bool"}, {"name": "", "type": "bool[3]"}], "type": "function"}, {"constant": true, "inputs": [{"name": "", "type": "uint256"}], "name": "answers", "outputs": [{"name": "", "type": "bytes32"}], "type": "function"}, {"constant": true, "inputs": [{"name": "", "type": "uint256"}], "name": "questions", "outputs": [{"name": "", "type": "bytes32"}], "type": "function"}, {"constant": false, "inputs": [], "name": "getResults", "outputs": [{"name": "", "type": "bool"}, {"name": "", "type": "int256[3][3]"}], "type": "function"}, {"constant": true, "inputs": [], "name": "closed", "outputs": [{"name": "", "type": "bool"}], "type": "function"}, {"constant": false, "inputs": [{"name": "_visibilities", "type": "bool[3]"}], "name": "close", "outputs": [{"name": "", "type": "bool"}], "type": "function"}, {"constant": false, "inputs": [], "name": "mySubmission", "outputs": [{"name": "", "type": "bool"}, {"name": "", "type": "uint8[3]"}], "type": "function"}, {"constant": false, "inputs": [{"name": "answ", "type": "uint8[3]"}], "name": "submit", "outputs": [{"name": "", "type": "bool"}], "type": "function"}, {"inputs": [{"name": "quests", "type": "bytes32[3]"}, {"name": "answ", "type": "bytes32[3]"}], "type": "constructor"}, {"anonymous": false, "inputs": [{"indexed": false, "name": "results", "type": "int256[3][3]"}], "name": "newResults", "type": "event"}, {"anonymous": false, "inputs": [{"indexed": false, "name": "results", "type": "int256[3][3]"}], "name": "over", "type": "event"}]
+rhchain = eth.contract(abi).at("0x20ebcd652517c0c42919f86db9cbf41b9e404d95")
+rhchain.mySubmission.call()
+rhchain = eth.contract(abi).at("0xe79a5b23bfb4c7ca2110bed2d6c56cbd21f457a7")
+admin.peers
+admin.nodeInfo
+rhchain.closed.call()
+rhchain.address
+rhchain.mySubmission.call)
+rhchain.mySubmission.call()
+rhchain = eth.contract(abi).at("0x797fcab99e67fddce0c01ad24ab0615595766817")
+rhchain.submit.sendTransaction([1,2,0],{from:eth.coinbase,gas:900000})
+rhchain = eth.contract(abi).at("0x0e8cb81c5e5084bcab7420aafc40380789cd99c2")
+rhchain = eth.contract(abi).at("0x1f08489adb117c4f2113970f6c19ea85a339df67")
+rhchain.submit.sendTransaction([1,2,0],{from:eth.coinbase,gas:900000})
+rhchain = eth.contract(abi).at("0x03c3cf0f44c586e4a019511a00399e29eb380c27")
+rhchain.submit.sendTransaction([1,2,0],{from:eth.coinbase,gas:900000})
+rhchain = eth.contract(abi).at("0xe139b4ceb1de34619dc48d5e65174b03fd4a407e")
+rhchain.submit.sendTransaction([1,2,0],{from:eth.coinbase,gas:900000})
+rhchain = eth.contract(abi).at("0xd31015f6a7bf54a7e1117d2bdb5fb808c356c1b5")
+rhchain.submit.sendTransaction([1,2,0],{from:eth.coinbase,gas:900000})
+rhchain = eth.contract(abi).at("0x5bac223bc781aac93db48a9d761cfa40fbd1d7fe")
+rhchain.submit.sendTransaction([1,2,0],{from:eth.coinbase,gas:900000})
+rhchain = eth.contract(abi).at("0x0e8cb81c5e5084bcab7420aafc40380789cd99c2")
+rhchain = eth.contract(abi).at("0x1ff06cd1b4ebe0a381d1478ad0d11795a7e02eb2")
+rhchain.submit.sendTransaction([1,2,0],{from:eth.coinbase,gas:900000})
+rhchain = eth.contract(abi).at("0x8d8c31f4375e2edf85207f98b7a80b144f61d253")
+admin.nodeInfo
+rhchain.address
+rhchain
+rhchain = eth.contract(abi).at("0x8d6c9569a852f534ab979aefa6898f45385bd6e3")
+rhchain.submit.sendTransaction([1,2,0],{from:eth.coinbase,gas:900000})

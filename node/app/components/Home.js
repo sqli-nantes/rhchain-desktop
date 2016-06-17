@@ -13,7 +13,8 @@ const styles = {
   head:{
     fontSize: "1.2em",
     fontWeight: "bold",
-    verticalAlign: "middle"
+    verticalAlign: "middle",
+    color: "#967D4D"
   },
   icon: {
     marginRight: "1vw",
@@ -50,7 +51,7 @@ export default class Home extends Component {
           }
           iconElementRight={
             <Link to="/">
-              <ActionPowerSettingsNew style={styles.close} color="white"/>
+              <ActionPowerSettingsNew style={styles.close} color="#967D4D"/>
             </Link>
           }
           showMenuIconButton={false}

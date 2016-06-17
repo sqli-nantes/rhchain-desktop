@@ -10,16 +10,18 @@ import * as HomeActions from '../actions/home';
 
 const styles = {
   title:{
-    backgroundColor: "#e74c3c",
-    color: "white"
+    backgroundColor: "#0A0A0A",
+    color: "#967D4D",
+    fontWeight: "bold"
   },
   button:{
     padding: 0,
-    marginTop: "2vh"
+    marginTop: "2vh",
   },
   progress: {
     marginTop: "2vh",
-    height: "3vh"
+    height: "3vh",
+    color: "#967D4D"
   }
 }
 
@@ -28,11 +30,11 @@ export default class Modal extends Component {
     const { loading, hasSubmitted, cancel, onSubmit} = this.props;
     var content = loading ? 
       (
-        <LinearProgress  mode="indeterminate" style={styles.progress} />  
+        <LinearProgress  mode="indeterminate" style={styles.progress} color={styles.progress.color}/>  
       ) : 
       (
-        <div className="row" >
-          <RaisedButton label="Oui" primary={true} className="col-xs-6" style={styles.button} onClick={onSubmit}/>
+        <div className="row">
+          <RaisedButton label="Oui" secondary={true} className="col-xs-6" style={styles.button} onClick={onSubmit}/>
           <RaisedButton label="Non" className="col-xs-6" style={styles.button} onClick={cancel}/>
         </div>
       )
@@ -44,7 +46,7 @@ export default class Modal extends Component {
               title={title}
               titleStyle={styles.title}
               onRequestClose={onRequestClose} >
-        
+          
           {content}
 
       </Dialog>

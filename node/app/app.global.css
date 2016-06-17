@@ -18,3 +18,7 @@ body, #root, .container {
 a {
   text-decoration: none;
 }
+
+.input-password input{
+	color: #967D4D
+}

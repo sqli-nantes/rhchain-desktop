@@ -49,7 +49,7 @@ export default class Collaborator extends Component {
 
 
 		var button = step > 2 ? null :	<RaisedButton	
-											primary={true} 
+											secondary={true} 
 											style={styles.footer.button}
 											labelStyle={styles.footer.button.label}
 											label="Soumettre"

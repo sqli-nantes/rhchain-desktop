@@ -32,7 +32,7 @@ export default class Administrator extends Component {
   	const {home, administrator, submit, validSubmit, endValid} = this.props;
 
   	var button = home.over ? null :
-							  	(<RaisedButton	primary={true} 
+							  	(<RaisedButton	secondary={true} 
 												style={styles.button}
 												labelStyle={styles.button.label}
 												label="Valider et publier"

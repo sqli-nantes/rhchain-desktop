@@ -11,7 +11,8 @@ injectTapEventPlugin();
 const lightMuiTheme = getMuiTheme({
 
   palette:{
-    primary1Color: "#f44336"
+    primary1Color: "#0A0A0A",
+    accent1Color: "#967D4D"
   }
 });
 
