@@ -33,15 +33,15 @@ export default class QuestionItemAdministrator extends Component {
     var visibleData = visibility.find((v)=>{return v.idQuestion == idQuestion});
     if( visibleData != null ){
       var visibilityIcon; 
+      var visibilityIconColor = over ? Color(iconColor).lighten(0.5).hexString() : styles.icon.color;
       if( visibleData.visible ){
-        var visibilityIconAction = over ? ()=>setVisibility(idQuestion,false) : null;
-        var visibilityIconColor = over ? Color(iconColor).lighten(0.5).hexString() : styles.icon.color;
+        var visibilityIconAction = over ? null : (()=>setVisibility(idQuestion,false)) ;
         visibilityIcon = <ActionVisibility  style={styles.icon}
                                             onClick={visibilityIconAction}
                                             color={visibilityIconColor}/>
       }
       else {
-        var visibilityIconAction = over ? ()=>setVisibility(idQuestion,true) : null;
+        var visibilityIconAction = over ? null : (()=>setVisibility(idQuestion,true));
         visibilityIcon = <ActionVisibilityOff style={styles.icon}
                                               onClick={visibilityIconAction}
                                               color={visibilityIconColor}/>

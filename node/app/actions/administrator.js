@@ -32,8 +32,6 @@ export function validSubmit() {
       dispatch( showInfo(message,INFO_TYPES.ERROR) );
     };
 
-    console.log(typeof closeVote);
-
     closeVote(visibilities,onSuccess,onFail);
 
   };

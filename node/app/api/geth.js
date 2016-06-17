@@ -94,7 +94,7 @@ export function eventSubscription(store){
         contract.newResults((error,ret) => {
             if( !error ){
                 store.dispatch(homeActions.receiveNewResults(formatResults(ret.args.results))); 
-                store.dispatch(homeActions.showInfo("Le sondage vient d'être répondu",homeActions.INFO_TYPES.SUCCESS));
+                store.dispatch(homeActions.showInfo("Nouvelle réponse au sondage",homeActions.INFO_TYPES.SUCCESS));
             }
             else showError(store,error.message);
         });
