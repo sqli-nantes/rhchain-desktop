@@ -80,15 +80,17 @@ export default class Login extends Component {
                       style={styles.button} 
                       onClick={this.onSubmit.bind(this)}/>
 
-        <span>ou</span>   
-
-        <RaisedButton
-                      primary={true}
-                      label="Créer un compte" 
-                      style={styles.button} 
-                      labelColor={styles.button.color} 
-                      onClick={this.onSubmit.bind(this)}/>
+        
       </div>
     );
   }
 }
+
+// <span>ou</span>   
+
+//         <RaisedButton
+//                       primary={true}
+//                       label="Créer un compte" 
+//                       style={styles.button} 
+//                       labelColor={styles.button.color} 
+//                       onClick={this.onSubmit.bind(this)}/>
