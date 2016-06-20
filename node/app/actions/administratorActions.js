@@ -1,4 +1,4 @@
-import { load, cancel, showInfo, INFO_TYPES, setOver } from './home'
+import { load, cancel, showInfo, INFO_TYPES, setOver } from './homeActions'
 
 import { closeVote } from '../api/geth'
 

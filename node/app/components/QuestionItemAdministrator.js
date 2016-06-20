@@ -9,7 +9,7 @@ import ActionVisibility from 'material-ui/svg-icons/action/visibility';
 import ActionVisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 
 import ResultPie from '../components/ResultPie';
-import * as AdministratorActions from '../actions/administrator';
+import * as AdministratorActions from '../actions/administratorActions';
 
 const styles = {
   root:{

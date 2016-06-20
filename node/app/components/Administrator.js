@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-import Modal from '../containers/Modal';
+import Modal from './Modal';
 
-import QuestionList from '../containers/QuestionList';
-import QuestionItemAdministrator from '../containers/QuestionItemAdministrator';
-import SubmissionStepper from '../containers/SubmissionStepper';
+import QuestionList from './QuestionList';
+import QuestionItemAdministrator from './QuestionItemAdministrator';
+import SubmissionStepper from './SubmissionStepper';
 
 import RaisedButton from 'material-ui/RaisedButton';
+
+import * as AdministratorActions from '../actions/administratorActions';
+import * as HomeActions from '../actions/homeActions';
 
 const styles = {
 
@@ -51,3 +56,16 @@ export default class Administrator extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    administrator: state.administrator,
+    home: state.home
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({},AdministratorActions,HomeActions), dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Administrator);

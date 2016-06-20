@@ -1,4 +1,4 @@
-import { load, cancel, showInfo, INFO_TYPES } from './home'
+import { load, cancel, showInfo, INFO_TYPES } from './homeActions'
 
 import { submitAnswers } from '../api/geth'
 

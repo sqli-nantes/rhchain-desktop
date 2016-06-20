@@ -4,7 +4,7 @@ import { 	SUBMIT, LOAD, CANCEL,
 			RECEIVE_NEW_RESULTS,  
 			SHOW_RESULTS,
 			SHOW_INFO, HIDE_INFO,
-			SET_OVER } from '../actions/home';
+			SET_OVER } from '../actions/homeActions';
 
 export const initialRootState = {
 	answersLabel: [

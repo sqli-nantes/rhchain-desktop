@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 
 import AppBar from 'material-ui/AppBar';
 import Snackbar from 'material-ui/Snackbar';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 import ActionPowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
+
+import * as HomeActions from '../actions/homeActions'
 
 const styles = {
   root: {
@@ -43,7 +47,7 @@ export default class Home extends Component {
     snackbarStyle.backgroundColor = info.color;
 
     return (
-      <div style={styles.root}>
+      <div style={styles.root} className="row">
         <AppBar
           className="row"
           title={
@@ -70,3 +74,15 @@ export default class Home extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    info: state.home.info
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(HomeActions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
-import home from './home';
-import collaborator from './collaborator';
-import administrator from './administrator';
-import login from './login';
+import home from './homeReducer';
+import collaborator from './collaboratorReducer';
+import administrator from './administratorReducer';
+import login from './loginReducer';
 
 const rootReducer = combineReducers({
   routing,

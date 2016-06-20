@@ -1,5 +1,5 @@
-import { SET_VISIBILITY, VALID_SUBMIT, END_VALID } from '../actions/administrator';
-import { initialRootState } from './home'
+import { SET_VISIBILITY, VALID_SUBMIT, END_VALID } from '../actions/administratorActions';
+import { initialRootState } from './homeReducer'
 
 const initialState = {
 	visibility: [] /* {idQuestion,visible} */

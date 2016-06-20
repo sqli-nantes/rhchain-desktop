@@ -6,7 +6,7 @@ import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
 
-import * as HomeActions from '../actions/home';
+import * as HomeActions from '../actions/homeActions';
 
 const styles = {
   title:{

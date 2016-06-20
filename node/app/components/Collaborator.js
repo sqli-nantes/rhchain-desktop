@@ -1,12 +1,17 @@
 import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-import Modal from '../containers/Modal';
+import Modal from './Modal';
 
-import QuestionList from '../containers/QuestionList';
+import QuestionList from './QuestionList';
 import RaisedButton from 'material-ui/RaisedButton';
-import SubmissionStepper from '../containers/SubmissionStepper';
-import QuestionItemCollaborator from '../containers/QuestionItemCollaborator'
-import QuestionItemCollaboratorResults from '../containers/QuestionItemCollaboratorResults'
+import SubmissionStepper from './SubmissionStepper';
+import QuestionItemCollaborator from './QuestionItemCollaborator'
+import QuestionItemCollaboratorResults from './QuestionItemCollaboratorResults'
+
+import * as CollaboratorActions from '../actions/collaboratorActions';
+import * as HomeActions from '../actions/homeActions';
 
 const styles = {
 	root: {
@@ -78,3 +83,17 @@ export default class Collaborator extends Component {
 		);
 	}
 }
+
+
+function mapStateToProps(state) {
+  return {
+    collaborator: state.collaborator,
+    home: state.home
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({},CollaboratorActions,HomeActions), dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Collaborator);

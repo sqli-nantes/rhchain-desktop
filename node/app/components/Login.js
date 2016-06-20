@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { Link, hashHistory } from 'react-router';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import ContentClear from 'material-ui/svg-icons/content/clear';
+
+import * as LoginActions from '../actions/loginActions';
 
 const styles={
 
@@ -85,6 +90,18 @@ export default class Login extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    error: state.login.error
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({},LoginActions), dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 // <span>ou</span>   
 

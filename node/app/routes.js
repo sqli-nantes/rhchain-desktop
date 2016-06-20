@@ -1,20 +1,18 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
-import App from './containers/App';
-import LoginPage from './containers/LoginPage';
-import HomePage from './containers/HomePage';
-import CounterPage from './containers/CounterPage';
-import CollaboratorPage from './containers/CollaboratorPage';
-import AdministratorPage from './containers/AdministratorPage';
+import App from './components/App';
+import Login from './components/Login';
+import Home from './components/Home';
+import Collaborator from './components/Collaborator';
+import Administrator from './components/Administrator';
 
 
 export default (
   <Route path="/" component={App}>
-    <IndexRoute component={LoginPage} />
-    <Route path="/home" component={HomePage} >
-		<Route path="/home/collab" component={CollaboratorPage} />
-		<Route path="/home/admin" component={AdministratorPage} />
+    <IndexRoute component={Login} />
+    <Route path="/home" component={Home} >
+		<Route path="/home/collab" component={Collaborator} />
+		<Route path="/home/admin" component={Administrator} />
     </Route>
-    <Route path="/counter" component={CounterPage} />
   </Route>
 );

@@ -1,5 +1,5 @@
-import { ANSWER, HAS_VOTED } from '../actions/collaborator';
-import { initialRootState } from './home'
+import { ANSWER, HAS_VOTED } from '../actions/collaboratorActions';
+import { initialRootState } from './homeReducer'
 
 
 const initialState = {

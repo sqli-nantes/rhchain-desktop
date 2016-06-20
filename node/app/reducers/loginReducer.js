@@ -1,4 +1,4 @@
-import { LOGIN, ERROR } from '../actions/login';
+import { LOGIN, ERROR } from '../actions/loginActions';
 
 const initialState = {
 	error: false

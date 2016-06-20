@@ -4,9 +4,9 @@ var BigNumber = require('bignumber.js')
 BigNumber.config({ERRORS: false});
 
 import ethereumConfig from '../../ethereum.json';
-import * as homeActions from '../actions/home';
-import * as administratorActions from '../actions/administrator';
-import * as collaboratorActions from '../actions/collaborator';
+import * as homeActions from '../actions/homeActions';
+import * as administratorActions from '../actions/administratorActions';
+import * as collaboratorActions from '../actions/collaboratorActions';
 
 
 function extractMessage(errorObject){return errorObject.message.split(':')[1];};

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import * as CollaboratorActions from '../actions/collaborator';
+import * as CollaboratorActions from '../actions/collaboratorActions';
 
 const styles = {
   root: {

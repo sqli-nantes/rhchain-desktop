@@ -1,5 +1,7 @@
 #!/bin/bash
 
-Xvfb -ac -screen scrn 1280x2000x24 :99 &
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
 
-npm start
+Xvfb :99 -screen 0 1024x768x16  &> xvfb.log &
+
+npm start --prefix /home/node

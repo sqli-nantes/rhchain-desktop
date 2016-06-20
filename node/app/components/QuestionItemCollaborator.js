@@ -9,7 +9,7 @@ import SocialSentimentSatisfied from 'material-ui/svg-icons/social/sentiment-sat
 import SocialSentimentNeutral from 'material-ui/svg-icons/social/sentiment-neutral';
 import SocialSentimentDissatisfied from 'material-ui/svg-icons/social/sentiment-dissatisfied';
 
-import * as CollaboratorActions from '../actions/collaborator';
+import * as CollaboratorActions from '../actions/collaboratorActions';
 
 const styles = {
 	root:{
