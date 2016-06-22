@@ -98,6 +98,7 @@ export const web3 = new Web3(new Web3.providers.IpcProvider(ethereumConfig.file,
 export const contract = web3.eth.contract(ethereumConfig.contractAbi).at(ethereumConfig.contractAddress);
 export const GAS = 900000;
 
+console.log(web3)
 
 export function submitAnswers(answers, onSuccess, onFail){
     unlockAccount60Sec( ethereumConfig.accountPassword,
@@ -242,6 +243,9 @@ export function createAccount(password,onSuccess,onFail){
     })
 
 }
+
+
+
 
 /*
 

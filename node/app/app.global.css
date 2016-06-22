@@ -1,4 +1,4 @@
-body, #root, .container {
+body, #root, .container-fluid {
   color: black;
   height: 100vh;
   background-color: white;
@@ -7,7 +7,7 @@ body, #root, .container {
   margin: 0;
 }
 
-.container {
+.container-fluid {
   padding:0;
 }
 

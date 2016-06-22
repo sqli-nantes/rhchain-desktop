@@ -24,7 +24,7 @@ export default class App extends Component {
   render() {
     return (
       <MuiThemeProvider muiTheme={lightMuiTheme}>
-        <div className="container">
+        <div className="container-fluid">
           {this.props.children}
           {
             (() => {
