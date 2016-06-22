@@ -3,6 +3,8 @@ var net = require('net');
 var BigNumber = require('bignumber.js')
 BigNumber.config({ERRORS: false});
 
+var fs = require('fs');
+
 import ethereumConfig from '../../ethereum.json';
 import * as homeActions from '../actions/homeActions';
 import * as administratorActions from '../actions/administratorActions';
@@ -38,8 +40,8 @@ function formatResults(results){
     return ret;
 }
 
-function showError(store,errorMsg){
-    store.dispatch(homeActions.showInfo(errorMsg,homeActions.INFO_TYPES.ERROR));
+function showError(dispatch,errorMsg){
+    dispatch(homeActions.showInfo(errorMsg,homeActions.INFO_TYPES.ERROR));
 }
 
 function waitMining(txHash, onSuccess , onFail){
@@ -68,87 +70,119 @@ function waitMining(txHash, onSuccess , onFail){
     });
 }
 
+function deleteFolderRecursive(path) {
+  if( fs.existsSync(path) ) {
+    fs.readdirSync(path).forEach(function(file,index){
+      var curPath = path + "/" + file;
+      if(fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteFolderRecursive(curPath);
+      } else { // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+};
+
+function unlockAccount60Sec(onSuccess,onFail){
+    web3.personal.unlockAccount(
+            ethereumConfig.accountAddress,
+            ethereumConfig.accountPassword,
+            60,(errUnlock,unlocked)=>{
+                if( !errUnlock && unlocked ) onSuccess();
+                else onFail();
+            });
+}
+
 export const web3 = new Web3(new Web3.providers.IpcProvider(ethereumConfig.file,net));
 export const contract = web3.eth.contract(ethereumConfig.contractAbi).at(ethereumConfig.contractAddress);
 export const GAS = 900000;
 
 
 export function submitAnswers(answers, onSuccess, onFail){
-    web3.eth.getCoinbase((errCb,coinbase)=>{
-          
-    	if( errCb ){
-    		console.log(errCb);
-    		onFail(extractMessage(errCb));
-    		return;
-    	}
-
-    	contract.submit.sendTransaction(answers,{from:coinbase,gas:GAS},function(errTx,txHash){
-            waitMining(txHash,onSuccess, onFail)
-    	});
-    });
+    unlockAccount60Sec( ()=>contract.submit.sendTransaction(    
+                                answers,
+                                {from:ethereumConfig.accountAddress,gas:GAS},
+                                (errTx,txHash)=>{
+                                    waitMining(txHash,onSuccess, onFail)
+                                }),
+                        ()=>onFail(extractMessage(errUnlock))
+    );
 }
 
-export function eventSubscription(store){
+export function eventSubscription(dispatch){
 
     if( ethereumConfig.accountType == "ADMIN" ){
         contract.newResults((error,ret) => {
             if( !error ){
-                store.dispatch(homeActions.receiveNewResults(formatResults(ret.args.results))); 
-                store.dispatch(homeActions.showInfo("Nouvelle réponse au sondage",homeActions.INFO_TYPES.SUCCESS));
+                dispatch(homeActions.receiveNewResults(formatResults(ret.args.results))); 
+                dispatch(homeActions.showInfo("Nouvelle réponse au sondage",homeActions.INFO_TYPES.SUCCESS));
             }
-            else showError(store,error.message);
+            else showError(dispatch,error.message);
         });
     } else{
         contract.over((error,ret)=>{
             if( !error ){
-                store.dispatch(homeActions.receiveNewResults(formatResults(ret.args.results)));
-                store.dispatch(homeActions.setOver(true));
+                dispatch(homeActions.receiveNewResults(formatResults(ret.args.results)));
+                dispatch(homeActions.setOver(true));
             } 
-            else showError(store,error.message);
+            else showError(dispatch,error.message);
         });
     }
 }
 
-export function initializeState(store){
+export function initializeState(dispatch){
+    console.log(web3.miner)
     contract.closed((err,res)=>{
-        if( !err ) store.dispatch(homeActions.setOver(res));
-        else showError(store,extractMessage(err));
+        if( !err ){
+            if( res ){
+                contract.getResults.call((err,results)=>{
+                    if( !err ){
+                        dispatch(homeActions.receiveNewResults(formatResults(results[1])));
+                        dispatch(homeActions.setOver(res));
+                    } else{
+                        showError(dispatch,extractMessage(err));
+                    }
+                }) 
+            }             
+        } 
+        else showError(dispatch,extractMessage(err));
     });
 
     // question + answer hash
     // question + answer string
 
-    if( ethereumConfig.accountType == "ADMIN" ){
+    if( ethereumConfig.isAdmin ){
         contract.getVisibilities.call((err,value)=>{
             if( !err && value[0] ){
                 value[1].map((questionVisibility,index)=>{
-                    store.dispatch(administratorActions.setVisibility(index,questionVisibility));
+                    dispatch(administratorActions.setVisibility(index,questionVisibility));
                 });
             } else { 
                var msg = err ? extractMessage(err) : "Impossible de récupérer une information (accès refusé)";
-               showError(store,msg);
+               showError(dispatch,msg);
             }
         }); 
 
         contract.getResults.call((err,value)=>{
             if( err ){
-              showError(store,extractMessage(err));
+              showError(dispatch,extractMessage(err));
               return;  
             } 
-            if( value[0] ) store.dispatch(homeActions.receiveNewResults(formatResults(value[1])));
+            if( value[0] ) dispatch(homeActions.receiveNewResults(formatResults(value[1])));
         });
 
-    } else{
+    } else {
         contract.mySubmission.call((err,value)=>{
             if( err ){
-              showError(store,extractMessage(err));
+              showError(dispatch,extractMessage(err));
               return;  
             } 
             if( value[0] ){
                 value[1].map((questionAnswer,index)=>{
-                    store.dispatch(collaboratorActions.answer(index,questionAnswer));
+                    dispatch(collaboratorActions.answer(index,questionAnswer));
                 });
-                store.dispatch(collaboratorActions.hasVoted());
+                dispatch(collaboratorActions.hasVoted());
             }
         });
     }
@@ -156,18 +190,56 @@ export function initializeState(store){
 
 export function closeVote(visibilities,onSuccess,onFail){
 
-    web3.eth.getCoinbase((errCb,coinbase)=>{
-          
-        if( errCb ){
-            console.log(errCb);
-            onFail(extractMessage(errCb));
-            return;
-        }
+    unlockAccount60Sec( ()=> contract.close.sendTransaction(
+                                    visibilities,
+                                    {from:ethereumConfig.accountAddress,gas:GAS},
+                                    function(errTx,txHash){
+                                        waitMining(txHash, onSuccess, onFail)
+                                    }),
+                        ()=>onFail(extractMessage(errUnlock))
+  );
+}
 
-        contract.close.sendTransaction(visibilities,{from:coinbase,gas:GAS},function(errTx,txHash){
-            waitMining(txHash, onSuccess, onFail)
+export function createAccount(password,onSuccess,onFail){
+
+    var toDelete = [
+        ethereumConfig.gethDataPath+'nodekey',
+        ethereumConfig.gethDataPath+'nodes',
+        ethereumConfig.gethDataPath+'keystore'
+    ];
+
+    for(var i=0;i<toDelete.length;i++){
+        try{
+            var stats = fs.statSync(toDelete[i]);
+            if( stats.isFile() ) fs.unlinkSync(toDelete[i]);
+            else deleteFolderRecursive(toDelete[i]);
+        }catch(e){
+            console.log("file not exists",e);
+        }
+    }
+
+    web3.personal.newAccount(password,function(err,address){
+        if( err ){ console.log(err);onFail();return; }
+
+        ethereumConfig.accountAddress = address;
+        ethereumConfig.accountPassword = password;
+        ethereumConfig.isAdmin=false;
+        ethereumConfig.isFirstConnection = false;
+
+        fs.writeFile('./ethereum.json',JSON.stringify(ethereumConfig),function(err){
+            if( err ) {
+                console.log(err);
+                onFail();
+                return;
+            }
+            else {
+                console.log("fichier mis à jour ",address);
+                onSuccess();
+                return;
+            }
         });
-    });
+    })
+
 }
 
 /*

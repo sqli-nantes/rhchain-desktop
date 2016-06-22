@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { Link, hashHistory } from 'react-router';
+import React,{ Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
 
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import ContentClear from 'material-ui/svg-icons/content/clear';
+import Snackbar from 'material-ui/Snackbar';
+
+import ethereumConfig from '../../ethereum.json';
 
 import * as LoginActions from '../actions/loginActions';
 
@@ -45,22 +46,56 @@ const styles={
     display: "block",
     width: "50vw",
     margin: "2vh 25vw"
+  },
+  snackbar: {
+    textAlign: "center",
+    fontWeight: "bold",
+    backgroundColor: "#ef5350"
   }
 
 };
 
 export default class Login extends Component {
 
-  onSubmit(){
-    event.stopPropagation();
-    if( this.refs.passwordInput.input.value == "admin" ){
-      hashHistory.push('/home/admin');
-    } else {
-      hashHistory.push('/home/collab');
-    }
-  }
-
   render() {
+    const { login, newAccount, createAndLogin, error, loginState } = this.props;
+
+    var inscriptionButton = ethereumConfig.isFirstConnection && !loginState.newAccount ?
+      (
+        <div>
+          <span>ou</span>   
+
+          <RaisedButton primary={true}
+                        label="Créer un compte" 
+                        style={styles.button} 
+                        labelColor={styles.button.color} 
+                        onClick={newAccount}/>
+        </div>
+      ) : null;  
+
+    var validationField = loginState.newAccount ? 
+      ( 
+        <TextField 
+          className="input-password"
+          ref="passwordValidationInput"
+          floatingLabelText="Valider le mot de passe"
+          type="password" 
+          floatingLabelStyle={styles.input.floatingLabelStyle}
+          floatingLabelFocusStyle={styles.input.floatingLabelStyle}  
+          underlineStyle={styles.input.underlineStyle}
+          underlineFocusStyle={styles.input.underlineStyle}
+          style={styles.input}
+          inputStyle={styles.input.password}
+          errorText={errorText} />
+      ) : null;
+
+    var mainButtonLabel = loginState.newAccount ? "Créer un compte et m'y connecter" : "Me connecter" ;
+    var mainButtonAction = loginState.newAccount ? 
+      ()=>createAndLogin(this.refs.passwordInput.input.value, this.refs.passwordValidationInput.input.value) : 
+      ()=>login(this.refs.passwordInput.input.value) ;
+
+    var errorText = loginState.errorInput ? "Erreur de saisie" : null;
+
     return (
       <div style={styles.root}>
 
@@ -69,23 +104,33 @@ export default class Login extends Component {
         <TextField 
           className="input-password"
           ref="passwordInput"
-          floatingLabelText="Mot de passe"
+          floatingLabelText="Saisir le mot de passe"
           type="password" 
           floatingLabelStyle={styles.input.floatingLabelStyle}
           floatingLabelFocusStyle={styles.input.floatingLabelStyle}  
           underlineStyle={styles.input.underlineStyle}
           underlineFocusStyle={styles.input.underlineStyle}
           style={styles.input}
-          inputStyle={styles.input.password}/>
+          inputStyle={styles.input.password}
+          errorText={errorText}/>
+
+        { validationField }
         
-        <RaisedButton 
-                      primary={true}
-                      label="Me Connecter"
+        <RaisedButton primary={true}
+                      label={mainButtonLabel}
                       labelColor={styles.button.color} 
                       style={styles.button} 
-                      onClick={this.onSubmit.bind(this)}/>
+                      onClick={mainButtonAction}/>
 
-        
+        {inscriptionButton}
+
+        <Snackbar
+          open={loginState.error}
+          message="Erreur de connexion"
+          autoHideDuration={4000}
+          onRequestClose={()=>error(false)}
+          bodyStyle={styles.snackbar}/>
+
       </div>
     );
   }
@@ -93,7 +138,7 @@ export default class Login extends Component {
 
 function mapStateToProps(state) {
   return {
-    error: state.login.error
+    loginState: state.login
   };
 }
 
@@ -103,11 +148,3 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
-// <span>ou</span>   
-
-//         <RaisedButton
-//                       primary={true}
-//                       label="Créer un compte" 
-//                       style={styles.button} 
-//                       labelColor={styles.button.color} 
-//                       onClick={this.onSubmit.bind(this)}/>

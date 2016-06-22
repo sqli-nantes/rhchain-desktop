@@ -1,15 +1,20 @@
-import { LOGIN, ERROR } from '../actions/loginActions';
+
+import { ERROR, ERROR_INPUT, NEW_ACCOUNT } from '../actions/loginActions';
 
 const initialState = {
-	error: false
+	error: false,
+	errorInput: false,
+	newAccount: false
 }
 
 export default function login(state = initialState, action) {
   switch (action.type) {
     case ERROR:
-      return Object.assign({},state,{error: true});
-    case LOGIN:
-      return Object.assign({},state,{error: false});
+      return Object.assign({},state,{error: action.payload.error});
+    case ERROR_INPUT:
+    	return Object.assign({},state,{errorInput: action.payload.error});
+  	case NEW_ACCOUNT:
+  		return Object.assign({},state,{newAccount: true});
     default:
       return state;
   }

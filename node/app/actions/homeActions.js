@@ -1,3 +1,21 @@
+
+import {eventSubscription,initializeState} from '../api/geth';
+
+export const SUBSCRIBE_EVENTS = 'SUBSCRIBE_EVENTS';
+export function subscribeEvents(){
+  return (dispatch)=>{
+    eventSubscription(dispatch);
+  }
+}
+
+export const INIT_STATE = 'INIT_STATE';
+export function initState(){
+  return (dispatch)=>{
+    initializeState(dispatch);
+  }
+}
+
+
 export const SUBMIT = 'SUBMIT';
 export function submit() {
   return {

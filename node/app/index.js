@@ -6,11 +6,8 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import routes from './routes';
 import configureStore from './store/configureStore';
 import './app.global.css';
-import {eventSubscription,initializeState} from './api/geth';
 
 const store = configureStore();
-eventSubscription(store);
-initializeState(store);
 const history = syncHistoryWithStore(hashHistory, store);
 
 render(

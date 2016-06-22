@@ -34,12 +34,17 @@ const styles = {
   },
   snackbar: {
     textAlign: "center",
-    fontWeight: "bold",
-    backgroundColor: "#ff0000"
+    fontWeight: "bold"
   }
 }
 
 export default class Home extends Component {
+
+  componentDidMount(){
+    this.props.subscribeEvents();
+    this.props.initState();
+  }
+
   render() {
     const {info,hideInfo} = this.props;
 
