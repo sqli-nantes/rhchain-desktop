@@ -17,7 +17,7 @@ const styles={
     backgroundColor: "#0A0A0A",
     height: "100%",
     textAlign: "center",
-    paddingTop: "30vh",
+    paddingTop: "25vh",
     color: "#967D4D"
   },
 
@@ -45,7 +45,8 @@ const styles={
   button: {
     display: "block",
     width: "50vw",
-    margin: "2vh 25vw"
+    margin: "2vh 25vw",
+    color: "#967D4D"
   },
   snackbar: {
     textAlign: "center",
@@ -58,7 +59,7 @@ const styles={
 export default class Login extends Component {
 
   render() {
-    const { login, newAccount, createAndLogin, error, loginState } = this.props;
+    const { login, newAccount, createAndLogin, error, loginState, cancelNewAccount } = this.props;
 
     var inscriptionButton = ethereumConfig.isFirstConnection && !loginState.newAccount ?
       (
@@ -67,11 +68,18 @@ export default class Login extends Component {
 
           <RaisedButton primary={true}
                         label="Créer un compte" 
-                        style={styles.button} 
-                        labelColor={styles.button.color} 
+                        style={styles.button}  
                         onClick={newAccount}/>
         </div>
-      ) : null;  
+      ) : null; 
+
+    var newAccountCancel = loginState.newAccount ? 
+      (
+        <RaisedButton primary={true}
+                      label={"Annuler"} 
+                      style={styles.button} 
+                      onClick={cancelNewAccount}/>
+      ) : null; 
 
     var validationField = loginState.newAccount ? 
       ( 
@@ -117,12 +125,12 @@ export default class Login extends Component {
         { validationField }
         
         <RaisedButton primary={true}
-                      label={mainButtonLabel}
-                      labelColor={styles.button.color} 
+                      label={mainButtonLabel} 
                       style={styles.button} 
                       onClick={mainButtonAction}/>
 
         {inscriptionButton}
+        {newAccountCancel}
 
         <Snackbar
           open={loginState.error}

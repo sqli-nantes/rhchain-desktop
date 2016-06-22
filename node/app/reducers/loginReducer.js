@@ -1,5 +1,5 @@
 
-import { ERROR, ERROR_INPUT, NEW_ACCOUNT } from '../actions/loginActions';
+import { ERROR, ERROR_INPUT, NEW_ACCOUNT, CANCEL_NEW_ACCOUNT } from '../actions/loginActions';
 
 const initialState = {
 	error: false,
@@ -13,8 +13,10 @@ export default function login(state = initialState, action) {
       return Object.assign({},state,{error: action.payload.error});
     case ERROR_INPUT:
     	return Object.assign({},state,{errorInput: action.payload.error});
-  	case NEW_ACCOUNT:
-  		return Object.assign({},state,{newAccount: true});
+    case NEW_ACCOUNT:
+      return Object.assign({},state,{newAccount: true});
+  	case CANCEL_NEW_ACCOUNT:
+  		return Object.assign({},state,{newAccount: false});
     default:
       return state;
   }

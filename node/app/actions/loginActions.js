@@ -54,9 +54,15 @@ export function login(password) {
 
 export const NEW_ACCOUNT = 'NEW_ACCOUNT';
 export function newAccount(){
-
 	return {
 		type: NEW_ACCOUNT
+	}
+}
+
+export const CANCEL_NEW_ACCOUNT = 'CANCEL_NEW_ACCOUNT';
+export function cancelNewAccount(){
+	return{
+		type: CANCEL_NEW_ACCOUNT
 	}
 }
 
