@@ -14,7 +14,7 @@ export default function login(state = initialState, action) {
     case ERROR_INPUT:
     	return Object.assign({},state,{errorInput: action.payload.error});
     case NEW_ACCOUNT:
-      return Object.assign({},state,{newAccount: true});
+      return Object.assign({},state,{error: false,errorInput: false,newAccount: true});
   	case CANCEL_NEW_ACCOUNT:
   		return Object.assign({},state,{newAccount: false});
     default:

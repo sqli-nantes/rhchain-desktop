@@ -3,7 +3,7 @@ var fs = require('fs');
 import { hashHistory } from 'react-router';
 
 import ethereumConfig from '../../ethereum.json';
-import { createAccount } from '../api/geth';
+import { createAccount,unlockAccount60Sec } from '../api/geth';
 
 export const ERROR = 'ERROR';
 export function error(error){
@@ -28,14 +28,15 @@ export function login(password) {
 	return (dispatch,getState)=>{
 		var error = true;
 
-		if( ethereumConfig.isFirstConnection ){
-			ethereumConfig.isFirstConnection = false;
-			fs.writeFile('./ethereum.json',JSON.stringify(ethereumConfig),function(err){
-	            if( !err ) error = false;
-	        });
-		}
-
-		if( ethereumConfig.accountPassword == password ){
+		var onSuccess = ()=>{
+		
+			if( ethereumConfig.isFirstConnection ){
+				ethereumConfig.isFirstConnection = false;
+				ethereumConfig.accountPassword = password;
+				fs.writeFile('./ethereum.json',JSON.stringify(ethereumConfig),function(err){
+		            if( !err ) error = false;
+		        });
+			}
 
 			if( ethereumConfig.isAdmin ){
 				hashHistory.push('/home/admin');
@@ -44,7 +45,13 @@ export function login(password) {
 				hashHistory.push('/home/collab');
 				error = false;
 			}
-		}
+
+		};
+
+		var onFail = ()=>{error=true}
+
+
+		unlockAccount60Sec(	password, onSuccess, onFail );
 
 		dispatch(errorInput(error));
 	}

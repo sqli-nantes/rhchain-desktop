@@ -84,13 +84,13 @@ function deleteFolderRecursive(path) {
   }
 };
 
-function unlockAccount60Sec(onSuccess,onFail){
+export function unlockAccount60Sec(password,onSuccess,onFail){
     web3.personal.unlockAccount(
             ethereumConfig.accountAddress,
-            ethereumConfig.accountPassword,
+            password,
             60,(errUnlock,unlocked)=>{
                 if( !errUnlock && unlocked ) onSuccess();
-                else onFail();
+                else onFail(errUnlock);
             });
 }
 
@@ -100,19 +100,20 @@ export const GAS = 900000;
 
 
 export function submitAnswers(answers, onSuccess, onFail){
-    unlockAccount60Sec( ()=>contract.submit.sendTransaction(    
+    unlockAccount60Sec( ethereumConfig.accountPassword,
+                        ()=>contract.submit.sendTransaction(    
                                 answers,
                                 {from:ethereumConfig.accountAddress,gas:GAS},
                                 (errTx,txHash)=>{
                                     waitMining(txHash,onSuccess, onFail)
                                 }),
-                        ()=>onFail(extractMessage(errUnlock))
+                        (errUnlock)=>onFail(extractMessage(errUnlock))
     );
 }
 
 export function eventSubscription(dispatch){
 
-    if( ethereumConfig.accountType == "ADMIN" ){
+    if( ethereumConfig.isAdmin ){
         contract.newResults((error,ret) => {
             if( !error ){
                 dispatch(homeActions.receiveNewResults(formatResults(ret.args.results))); 
@@ -132,7 +133,6 @@ export function eventSubscription(dispatch){
 }
 
 export function initializeState(dispatch){
-    console.log(web3.miner)
     contract.closed((err,res)=>{
         if( !err ){
             if( res ){
@@ -190,13 +190,14 @@ export function initializeState(dispatch){
 
 export function closeVote(visibilities,onSuccess,onFail){
 
-    unlockAccount60Sec( ()=> contract.close.sendTransaction(
+    unlockAccount60Sec( ethereumConfig.accountPassword,
+                        ()=> contract.close.sendTransaction(
                                     visibilities,
                                     {from:ethereumConfig.accountAddress,gas:GAS},
                                     function(errTx,txHash){
                                         waitMining(txHash, onSuccess, onFail)
                                     }),
-                        ()=>onFail(extractMessage(errUnlock))
+                        (errUnlock)=>onFail(extractMessage(errUnlock))
   );
 }
 
