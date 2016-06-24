@@ -7,6 +7,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import config from './webpack.config.development';
 
+const path = require('path');
 const app = express();
 const compiler = webpack(config);
 const PORT = 3001;
@@ -21,6 +22,11 @@ const wdm = webpackDevMiddleware(compiler, {
 app.use(wdm);
 
 app.use(webpackHotMiddleware(compiler));
+
+app.get('*', function response(req, res) {
+  res.sendFile(path.join(__dirname, 'app/app.html'));
+});
+
 
 const server = app.listen(PORT, 'localhost', err => {
   if (err) {
