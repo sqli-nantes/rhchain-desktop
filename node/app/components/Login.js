@@ -64,7 +64,7 @@ export default class Login extends Component {
     var inscriptionButton = ethereumConfig.isFirstConnection && !loginState.newAccount ?
       (
         <div>
-          <span>ou</span>   
+          <span>Pas de mot de passe ?</span>   
 
           <RaisedButton primary={true}
                         label="Créer un compte" 
@@ -76,8 +76,7 @@ export default class Login extends Component {
     var newAccountCancel = loginState.newAccount ? 
       (
         <RaisedButton primary={true}
-                      label={"Annuler"} 
-                      style={styles.button} 
+                      label="Annuler"                    style={styles.button} 
                       onClick={cancelNewAccount}/>
       ) : null; 
 

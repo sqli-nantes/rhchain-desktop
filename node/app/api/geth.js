@@ -210,7 +210,7 @@ export function createAccount(password,onSuccess,onFail){
 
             if( !errWrite ){
                 web3.miner.setEtherbase(address,(errBase, set)=>{
-                    if( errBase || set ) onFail();
+                    if( errBase || !set ) onFail();
                     else onSuccess();
                 });   
             } else onFail();          
