@@ -29,3 +29,12 @@ admin.addPeer("enode://c34b741a680b82649a1571a320575b6668914de4978c005c1c5f269be
 miner.start()
 miner.stop()
 eth.getBalance(eth.accounts[0])
+admin.p
+admin.peers
+admin.nodeInfo.enode
+admin.peers
+eth.getBalance()
+eth.getBalance(eth.coinbase)
+miner.stop()
+eth.getBlock()
+eth.getBlock(1)

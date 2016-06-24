@@ -1,20 +1,30 @@
 
-import {eventSubscription,initializeState} from '../api/geth';
+import {getVoteState,mineOneBlock} from '../api/geth';
 
-export const SUBSCRIBE_EVENTS = 'SUBSCRIBE_EVENTS';
-export function subscribeEvents(){
-  return (dispatch)=>{
-    eventSubscription(dispatch);
-  }
-}
 
-export const INIT_STATE = 'INIT_STATE';
 export function initState(){
   return (dispatch)=>{
-    initializeState(dispatch);
+
+    var onSuccess = (results)=>{
+      dispatch(receiveNewResults(results));
+      dispatch(setOver(true));
+    }
+
+    var onFail = (error)=>{
+      dispatch(showInfo(error,INFO_TYPES.ERROR));
+    }
+
+    getVoteState(onSuccess,onFail);
   }
 }
 
+
+export const MINE = 'MINE';
+export function mine(){
+  return (dispatch)=>{
+    mineOneBlock();
+  }
+}
 
 export const SUBMIT = 'SUBMIT';
 export function submit() {

@@ -1,6 +1,52 @@
-import { load, cancel, showInfo, INFO_TYPES, setOver } from './homeActions'
+import { load, cancel, showInfo, INFO_TYPES, setOver, receiveNewResults } from './homeActions'
 
-import { closeVote } from '../api/geth'
+import { closeVote, getAdminVisibilities, getAdminResults, adminEventSubscription } from '../api/geth'
+
+
+export function subscribeAdminEvents(){
+  return (dispatch)=>{
+
+    var onSuccess = (results)=>{
+      dispatch(receiveNewResults(results)); 
+      dispatch(showInfo("Nouvelle réponse au sondage",INFO_TYPES.SUCCESS));
+    }
+
+    var onFail = (error)=>{
+      dispatch(showInfo(error,INFO_TYPES.ERROR));
+    }
+
+    adminEventSubscription(onSuccess,onFail);
+  }
+}
+
+export function initAdminVisibilities(){
+  return (dispatch)=>{
+    var onSuccess = (index,questionVisibility)=>{
+      dispatch(setVisibility(index,questionVisibility));
+    }
+
+    var onFail = (error)=>{
+      var msg = error ? error : "Impossible de récupérer une information (accès refusé)";
+      dispatch(showInfo(msg,INFO_TYPES.ERROR));
+    }
+
+    getAdminVisibilities(onSuccess,onFail);
+  }
+}
+
+export function initAdminResults(){
+  return (dispatch)=>{
+    var onSuccess = (results)=>{
+      dispatch(receiveNewResults(results));
+    }
+
+    var onFail = (error)=>{
+      dispatch(showInfo(error,INFO_TYPES.ERROR));
+    }
+
+    getAdminResults(onSuccess,onFail);
+  }
+}
 
 export const SET_VISIBILITY = 'SET_VISIBILITY';
 export function setVisibility(idQuestion,visible) {

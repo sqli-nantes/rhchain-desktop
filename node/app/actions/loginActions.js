@@ -26,7 +26,14 @@ export const LOGIN = 'LOGIN';
 export function login(password) {
 
 	return (dispatch,getState)=>{
-		var error = true;
+
+		var connect = ()=>{
+			if( ethereumConfig.isAdmin ){
+				hashHistory.push('/home/admin');
+			} else {
+				hashHistory.push('/home/collab');
+			}
+		}
 
 		var onSuccess = ()=>{
 		
@@ -34,26 +41,21 @@ export function login(password) {
 				ethereumConfig.isFirstConnection = false;
 				ethereumConfig.accountPassword = password;
 				fs.writeFile('./ethereum.json',JSON.stringify(ethereumConfig),function(err){
-		            if( !err ) error = false;
+		            if( !err ) {
+		            	dispatch(errorInput(false));
+		            	connect();
+		            }		            
 		        });
-			}
+			} else connect();
 
-			if( ethereumConfig.isAdmin ){
-				hashHistory.push('/home/admin');
-				error = false;
-			} else {
-				hashHistory.push('/home/collab');
-				error = false;
-			}
-
+			
 		};
 
-		var onFail = ()=>{error=true}
+		var onFail = ()=>dispatch(errorInput(true));
 
 
 		unlockAccount60Sec(	password, onSuccess, onFail );
 
-		dispatch(errorInput(error));
 	}
 
 }

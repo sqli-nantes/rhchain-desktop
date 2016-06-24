@@ -33,6 +33,13 @@ const styles = {
 }
 
 export default class Administrator extends Component {
+
+	componentDidMount(){
+		this.props.subscribeAdminEvents();
+		this.props.initAdminVisibilities();
+		this.props.initAdminResults();
+	}
+
   render() {
   	const {home, administrator, submit, validSubmit, endValid} = this.props;
 

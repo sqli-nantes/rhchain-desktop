@@ -23,7 +23,7 @@ const styles = {
 			width: "50vw",
 			margin: "0 25vw",
 			label:{
-				fontSize: "1.5em",
+				fontSize: "1.5em", 
 				fontWeight: "bold"
 			}
 		},
@@ -40,6 +40,11 @@ const styles = {
 };
 
 export default class Collaborator extends Component {
+
+	componentDidMount(){
+		this.props.subscribeCollabEvents();
+    	this.props.initCollabState();
+  	}
 
 	render() {
 		const {home, collaborator, submit, validSubmit, voteSubmitted } = this.props;

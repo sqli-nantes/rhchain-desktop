@@ -9,6 +9,7 @@ import ContentClear from 'material-ui/svg-icons/content/clear';
 import ActionPowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 
 import * as HomeActions from '../actions/homeActions'
+import ethereumConfig from '../../ethereum.json';
 
 const styles = {
   root: {
@@ -41,7 +42,6 @@ const styles = {
 export default class Home extends Component {
 
   componentDidMount(){
-    this.props.subscribeEvents();
     this.props.initState();
   }
 

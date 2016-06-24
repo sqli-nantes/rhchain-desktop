@@ -1,7 +1,42 @@
-import { load, cancel, showInfo, INFO_TYPES } from './homeActions'
+import { load, cancel, showInfo, INFO_TYPES, receiveNewResults, setOver } from './homeActions'
 
-import { submitAnswers } from '../api/geth'
+import { submitAnswers, collabEventSubscription, getCollabSubmission } from '../api/geth'
 
+
+
+
+export function subscribeCollabEvents(){
+  return (dispatch)=>{
+    var onSuccess = (results)=>{
+      dispatch(receiveNewResults(results));
+      dispatch(setOver(true));
+    }
+
+    var onFail = (error)=>{
+      dispatch(showInfo(error,INFO_TYPES.ERROR));
+    }
+
+    collabEventSubscription(onSuccess,onFail);
+  }
+}
+
+export function initCollabState(){
+  return (dispatch)=>{
+    var onResult = (index,questionAnswer)=>{
+       dispatch(answer(index,questionAnswer));
+    }
+
+    var onSuccess = ()=>{
+      dispatch(hasVoted());
+    }
+
+    var onFail = (error)=>{
+      dispatch(showInfo(error,INFO_TYPES.ERROR));
+    }
+
+    getCollabSubmission(onResult,onSuccess,onFail);
+  }
+}
 
 
 export const ANSWER = 'ANSWER';
