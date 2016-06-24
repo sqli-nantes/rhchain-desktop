@@ -1,6 +1,6 @@
 import { load, cancel, showInfo, INFO_TYPES, setOver, receiveNewResults } from './homeActions'
 
-import { closeVote, getAdminVisibilities, getAdminResults, adminEventSubscription } from '../api/geth'
+import { closeVote, getAdminVisibilities, getAdminResults, adminEventSubscription, startMiner, stopMiner } from '../api/geth'
 
 
 export function subscribeAdminEvents(){
@@ -71,13 +71,16 @@ export function validSubmit() {
       dispatch( cancel() );
       dispatch( setOver(true) );
       dispatch( showInfo("Vous venez de terminer le vote",INFO_TYPES.SUCCESS) );
+      stopMiner();
     };
 
     var onFail = (message)=>{
       dispatch( cancel() );
       dispatch( showInfo(message,INFO_TYPES.ERROR) );
+      stopMiner();
     };
 
+    startMiner();
     closeVote(visibilities,onSuccess,onFail);
 
   };

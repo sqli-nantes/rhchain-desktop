@@ -46,9 +46,7 @@ export function login(password) {
 		            	connect();
 		            }		            
 		        });
-			} else connect();
-
-			
+			} else connect();		
 		};
 
 		var onFail = ()=>dispatch(errorInput(true));

@@ -133,7 +133,6 @@ export function getLabels(onSuccess,onFail){
     
     // question + answer hash
     // question + answer string
-
 }
 
 export function getAdminVisibilities(onSuccess,onFail){
@@ -207,21 +206,16 @@ export function createAccount(password,onSuccess,onFail){
         ethereumConfig.isAdmin=false;
         ethereumConfig.isFirstConnection = false;
 
-        fs.writeFile('./ethereum.json',JSON.stringify(ethereumConfig),function(err){
+        fs.writeFile('./ethereum.json',JSON.stringify(ethereumConfig),function(errWrite){
 
-            web3.miner.setEtherbase(address,(err, res)=>{
-                console.log(err,res);
-                web3.eth.getCoinbase((e,r)=>{
-                    console.log(e,r);
-                });
-            });
-
-
-            if( err ) onFail();
-            else onSuccess();
+            if( !errWrite ){
+                web3.miner.setEtherbase(address,(errBase, set)=>{
+                    if( errBase || set ) onFail();
+                    else onSuccess();
+                });   
+            } else onFail();          
         });
     })
-
 }
 
 export function mineOneBlock(onSuccess,onFail){
@@ -246,6 +240,14 @@ export function mineOneBlock(onSuccess,onFail){
         } else onFail(extractMessage(errStart));
     });  
 }
+export function startMiner(){
+    web3.miner.start(()=>{console.log("miner démarré")});
+}
+
+export function stopMiner(){
+    web3.miner.stop(()=>{console.log("miner arrêté")});
+}
+
 
 
 

@@ -1,6 +1,6 @@
 import { load, cancel, showInfo, INFO_TYPES, receiveNewResults, setOver } from './homeActions'
 
-import { submitAnswers, collabEventSubscription, getCollabSubmission } from '../api/geth'
+import { submitAnswers, collabEventSubscription, getCollabSubmission, startMiner, stopMiner } from '../api/geth'
 
 
 
@@ -69,22 +69,18 @@ export function validSubmit() {
     dispatch(load(true));
 
     var onSuccess = ()=>{
-      dispatch(voteSubmitted())
+      dispatch( hasVoted() );
+      dispatch( cancel() );
+      dispatch( showInfo("Votre choix a bien été pris en compte",INFO_TYPES.SUCCESS) );
+      stopMiner();
     };
     var onFail = (message)=>{
-      console.log("submit failed ",message)
       dispatch(cancel());
       dispatch(showInfo(message,INFO_TYPES.ERROR));
+      stopMiner();
     };
 
+    startMiner();
     submitAnswers(answers,onSuccess,onFail);
   };
-}
-
-export function voteSubmitted(){
-  return (dispatch,getState) => {
-    dispatch( hasVoted() );
-    dispatch( cancel() );
-    dispatch( showInfo("Votre choix a bien été pris en compte",INFO_TYPES.SUCCESS) );
-  }
 }

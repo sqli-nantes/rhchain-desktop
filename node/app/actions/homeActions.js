@@ -18,11 +18,19 @@ export function initState(){
   }
 }
 
-
 export const MINE = 'MINE';
 export function mine(){
   return (dispatch)=>{
-    mineOneBlock();
+
+    var onSuccess = ()=>{
+      dispatch(showInfo("Vous avez miné un bloc", INFO_TYPES.SUCCESS));
+    }
+
+    var onFail = ()=>{
+      dispatch(showInfo("Échec du minage", INFO_TYPES.ERROR));
+    }
+
+    mineOneBlock(onSuccess,onFail);
   }
 }
 
