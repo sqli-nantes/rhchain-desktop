@@ -1,6 +1,6 @@
 var BigNumber = require('bignumber.js')
 BigNumber.config({ERRORS: false});
-var fs = require('fs');
+// var fs = require('fs');
 
 import {create} from '../utils/web3IPCExtension';
 import ethereumConfig from '../../ethereum.json';
@@ -38,8 +38,8 @@ function formatResults(results){
 function waitTxMining(txHash, onSuccess , onFail){
     var filter = web3.eth.filter("latest").watch(function(errWatch,blockHash){
 
-        if( errWatch ){ 
-            console.log(errWatch); 
+        if( errWatch ){
+            console.log(errWatch);
             onFail(extractMessage(errWatch));
             return;
         }
@@ -50,7 +50,7 @@ function waitTxMining(txHash, onSuccess , onFail){
                 console.log(errBlock);
                 onFail(extractMessage(errBlock));
                 return;
-            } 
+            }
 
             if( block.transactions.indexOf(txHash) == -1 ) return;
 
@@ -62,17 +62,17 @@ function waitTxMining(txHash, onSuccess , onFail){
 }
 
 function deleteFolderRecursive(path) {
-  if( fs.existsSync(path) ) {
-    fs.readdirSync(path).forEach(function(file,index){
-      var curPath = path + "/" + file;
-      if(fs.lstatSync(curPath).isDirectory()) { // recurse
-        deleteFolderRecursive(curPath);
-      } else { // delete file
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(path);
-  }
+  // if( fs.existsSync(path) ) {
+  //   fs.readdirSync(path).forEach(function(file,index){
+  //     var curPath = path + "/" + file;
+  //     if(fs.lstatSync(curPath).isDirectory()) { // recurse
+  //       deleteFolderRecursive(curPath);
+  //     } else { // delete file
+  //       fs.unlinkSync(curPath);
+  //     }
+  //   });
+  //   fs.rmdirSync(path);
+  // }
 };
 
 export const web3 = create(ethereumConfig.file);
@@ -91,7 +91,7 @@ export function unlockAccount60Sec(password,onSuccess,onFail){
 
 export function submitAnswers(answers, onSuccess, onFail){
     unlockAccount60Sec( ethereumConfig.accountPassword,
-                        ()=>contract.submit.sendTransaction(    
+                        ()=>contract.submit.sendTransaction(
                                 answers,
                                 {from:ethereumConfig.accountAddress,gas:GAS},
                                 (errTx,txHash)=>{
@@ -122,15 +122,15 @@ export function getVoteState(onSuccess,onFail){
                 contract.getResults.call((err,results)=>{
                     if( !err ) onSuccess(formatResults(results[1]));
                     else onFail(extractMessage(err));
-                }) 
-            }             
-        } 
+                })
+            }
+        }
         else onFail(extractMessage(err));
     });
 }
 
 export function getLabels(onSuccess,onFail){
-    
+
     // question + answer hash
     // question + answer string
 }
@@ -142,7 +142,7 @@ export function getAdminVisibilities(onSuccess,onFail){
                 onSuccess(index,questionVisibility);
             });
         } else onFail(extractMessage(err));
-    }); 
+    });
 }
 
 export function getAdminResults(onSuccess,onFail){
@@ -156,8 +156,8 @@ export function getCollabSubmission(onResult,onSuccess,onFail){
     contract.mySubmission.call((err,value)=>{
         if( err ){
           onFail(extractMessage(err));
-          return;  
-        } 
+          return;
+        }
         if( value[0] ){
             value[1].map((questionAnswer,index)=>{
                 onResult(index,questionAnswer);
@@ -190,9 +190,9 @@ export function createAccount(password,onSuccess,onFail){
 
     for(var i=0;i<toDelete.length;i++){
         try{
-            var stats = fs.statSync(toDelete[i]);
-            if( stats.isFile() ) fs.unlinkSync(toDelete[i]);
-            else deleteFolderRecursive(toDelete[i]);
+            // var stats = fs.statSync(toDelete[i]);
+            // if( stats.isFile() ) fs.unlinkSync(toDelete[i]);
+            // else deleteFolderRecursive(toDelete[i]);
         }catch(e){
             console.log("file not exists",e);
         }
@@ -212,8 +212,8 @@ export function createAccount(password,onSuccess,onFail){
                 web3.miner.setEtherbase(address,(errBase, set)=>{
                     if( errBase || !set ) onFail();
                     else onSuccess();
-                });   
-            } else onFail();          
+                });
+            } else onFail();
         });
     })
 }
@@ -238,7 +238,7 @@ export function mineOneBlock(onSuccess,onFail){
                 } else onFail(extractMessage(errWatch));
             });
         } else onFail(extractMessage(errStart));
-    });  
+    });
 }
 export function startMiner(){
     web3.miner.start(()=>{console.log("miner démarré")});
@@ -254,9 +254,9 @@ export function stopMiner(){
 
 /*
 
-Questions : 
+Questions :
 ["0xd6d82d1d3657312dc08d2108b09029bb501f8cdab6b6bbe7b9408b13d9ced6e7","0x887d8df6aaf3010c9eefed46e2ad03e7b411e84b7f37edd9af0dab6cc29cf257","0x926ef6616a951b0d880385dd2a65850a0b50eb1edc180310ed22b821172e2b10"]
-Réponses : 
+Réponses :
 ["0x910ef7ea438885df31719697a6f71372f16381791e7ba4533dd3df07686e54f6","0x41e2723e115c71a7045d3b1fae971320655b5209b6084bedea3dfd6ff5681efe","0x3bebf25073e42779969fe7d39279c4e0e1af9b3a5d83d30b46af408cad562643"]
 
 
@@ -269,17 +269,17 @@ rhchain = eth.contract(compiled.RHChain.info.abiDefinition).new(["0xd6d82d1d3657
 contract RHChain {
 
     address private admin;
-    bool[3] private visibilities; /* [q1.visibile,q2.visibile,q3.visibile] 
+    bool[3] private visibilities; /* [q1.visibile,q2.visibile,q3.visibile]
     mapping( address => bool ) private hasSubmitted;
-    mapping( address =>  uint8[3] ) private submissions; /* @ --> [idx q1.answer,idx q2.answer, idx q3.answer] 
-    int[3][3] private results; /* [nb vote q1.answer1, nb vote q1.answer2, nb vote q1.answer3 ][...] 
-    
+    mapping( address =>  uint8[3] ) private submissions; /* @ --> [idx q1.answer,idx q2.answer, idx q3.answer]
+    int[3][3] private results; /* [nb vote q1.answer1, nb vote q1.answer2, nb vote q1.answer3 ][...]
+
     bool public closed = false;
-    bytes32[3] public questions; /* questions hash 
-    bytes32[3] public answers; /* answers hash 
-    
+    bytes32[3] public questions; /* questions hash
+    bytes32[3] public answers; /* answers hash
+
     event newResults(int[3][3] results);
-    event over(int[3][3] results); /* returns results with visibility. -1 is : not visible 
+    event over(int[3][3] results); /* returns results with visibility. -1 is : not visible
 
     modifier onlyAdmin {
         if( msg.sender != admin ) throw;
@@ -297,51 +297,51 @@ contract RHChain {
         if( closed ) throw;
         _
     }
-    
+
     function RHChain(bytes32[3] quests, bytes32[3] answ){
         admin = msg.sender;
         questions = quests;
         answers = answ;
     }
-    
+
     function submit(uint8[3] answ) onlyOpened onlyCollab onlyOnce returns(bool){
-        
+
         if( !isSubmissionValid(answ) ) throw;
-        
+
         submissions[msg.sender] = answ;
         hasSubmitted[msg.sender] = true;
-        
+
         for(uint8 i=0;i<results.length;i++){
             results[i][answ[i]]++;
         }
-        
+
         newResults(results);
         return true;
     }
-    
+
     function close(bool[3] _visibilities) onlyAdmin onlyOpened returns(bool){
         visibilities = _visibilities;
         closed = true;
         over(resultsWithVisibilityFilter());
         return true;
     }
-    
+
     function mySubmission() returns(bool,uint8[3]) {
         if( msg.sender == admin ) throw;
         if( !hasSubmitted[msg.sender] ) throw;
         else return (true,submissions[msg.sender]);
     }
-    
+
     function getResults() returns(bool, int[3][3] ){
         if( msg.sender == admin ) return (true,results);
         else if( closed ) return (true,resultsWithVisibilityFilter());
         else throw;
     }
-    
+
     function getVisibilities() onlyAdmin returns(bool, bool[3] )  {
         return (true,visibilities);
     }
-    
+
     function isSubmissionValid(uint8[3] sub) private returns (bool){
         for(uint i=0;i<sub.length;i++){
             if( sub[i]<0 || sub[i] > 2 ) return false;
@@ -350,7 +350,7 @@ contract RHChain {
     }
     function resultsWithVisibilityFilter() private returns(int[3][3] ret) {
         ret = results;
-        
+
         for(uint8 i=0;i<results.length;i++){
             if( !visibilities[i] ){
                 for( uint8 j=0 ; j<results.length ; j++){
