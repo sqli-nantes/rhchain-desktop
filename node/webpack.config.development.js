@@ -1,6 +1,7 @@
 /* eslint max-len: 0 */
 import webpack from 'webpack';
 import baseConfig from './webpack.config.base';
+import path from 'path';
 
 const config = {
   ...baseConfig,
@@ -9,14 +10,14 @@ const config = {
 
   devtool: 'cheap-module-eval-source-map',
 
-  entry: [
-    'webpack-hot-middleware/client?path=http://localhost:3001/__webpack_hmr',
-    './app/index'
-  ],
+  entry: {
+    app: './app/index.js',
+    vendor: ['react']
+  },
 
   output: {
     ...baseConfig.output,
-    publicPath: 'http://localhost:3001/dist/'
+    publicPath: '/'
   },
 
   module: {
@@ -53,8 +54,10 @@ const config = {
       }
     })
   ],
-
-  target: 'electron-renderer'
+  devServer: {
+    contentBase: path.resolve(__dirname, './app/'),
+    port: 3000
+  },
 };
 
 export default config;

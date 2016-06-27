@@ -4,7 +4,7 @@ export default {
   module: {
     loaders: [{
       test: /\.jsx?$/,
-      loaders: ['babel-loader'],
+      loaders: ['react-hot', 'babel-loader'],
       exclude: /node_modules/
     }, {
       test: /\.json$/,
@@ -14,7 +14,7 @@ export default {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
-    libraryTarget: 'commonjs2'
+    // libraryTarget: 'commonjs2'
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
