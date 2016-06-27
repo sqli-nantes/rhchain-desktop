@@ -1,4 +1,4 @@
-var fs = require('fs');
+// var fs = require('fs');
 
 import { hashHistory } from 'react-router';
 
@@ -36,17 +36,17 @@ export function login(password) {
 		}
 
 		var onSuccess = ()=>{
-		
+
 			if( ethereumConfig.isFirstConnection ){
 				ethereumConfig.isFirstConnection = false;
 				ethereumConfig.accountPassword = password;
-				fs.writeFile('./ethereum.json',JSON.stringify(ethereumConfig),function(err){
-		            if( !err ) {
-		            	dispatch(errorInput(false));
-		            	connect();
-		            }		            
-		        });
-			} else connect();		
+				// fs.writeFile('./ethereum.json',JSON.stringify(ethereumConfig),function(err){
+		  //           if( !err ) {
+		  //           	dispatch(errorInput(false));
+		  //           	connect();
+		  //           }
+		  //       });
+			} else connect();
 		};
 
 		var onFail = ()=>dispatch(errorInput(true));
@@ -79,7 +79,7 @@ export function createAndLogin(password,validation){
 	return (dispatch)=>{
 		if( password != validation ) dispatch(errorInput(true));
 
-		createAccount(password, 
+		createAccount(password,
 			()=>dispatch(login(password)),
 			()=>dispatch(error(true)) );
 	}
