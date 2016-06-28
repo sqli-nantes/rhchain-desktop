@@ -7,8 +7,6 @@ import TextField from 'material-ui/TextField';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 import Snackbar from 'material-ui/Snackbar';
 
-import ethereumConfig from '../../ethereum.json';
-
 import * as LoginActions from '../actions/loginActions';
 
 const styles={
@@ -58,10 +56,14 @@ const styles={
 
 export default class Login extends Component {
 
+  componentDidMount(){
+    this.props.errorInput(false);
+  }
+
   render() {
     const { login, newAccount, createAndLogin, error, loginState, cancelNewAccount } = this.props;
 
-    var inscriptionButton = ethereumConfig.isFirstConnection && !loginState.newAccount ?
+    var inscriptionButton = !loginState.newAccount ?
       (
         <div>
           <span>ou</span>   
