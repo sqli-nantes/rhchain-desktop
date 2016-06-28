@@ -3,7 +3,7 @@ var web3 = new Web3();
 // var net = require('net');
 
 export function create(ipcFilePath){
-
+	return web3;
 	// web3.setProvider(new Web3.providers.IpcProvider(ipcFilePath,net));
 
 	// web3._extend({
