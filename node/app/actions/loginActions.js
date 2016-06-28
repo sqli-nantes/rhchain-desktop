@@ -1,9 +1,6 @@
-// var fs = require('fs');
-
 import { hashHistory } from 'react-router';
 
-import ethereumConfig from '../../ethereum.json';
-import { createAccount,unlockAccount60Sec } from '../api/geth';
+import { createAccount,unlockAccount60Sec, getCoinbase } from '../api/geth';
 
 export const ERROR = 'ERROR';
 export function error(error){
@@ -27,32 +24,24 @@ export function login(password) {
 
 	return (dispatch,getState)=>{
 
-		var connect = ()=>{
-			if( ethereumConfig.isAdmin ){
+		var onSuccess = (isAdmin)=>{
+			localStorage.setItem('passwd',password);
+			if( isAdmin ){
 				hashHistory.push('/home/admin');
 			} else {
 				hashHistory.push('/home/collab');
 			}
-		}
-
-		var onSuccess = ()=>{
-
-			if( ethereumConfig.isFirstConnection ){
-				ethereumConfig.isFirstConnection = false;
-				ethereumConfig.accountPassword = password;
-				// fs.writeFile('./ethereum.json',JSON.stringify(ethereumConfig),function(err){
-		  //           if( !err ) {
-		  //           	dispatch(errorInput(false));
-		  //           	connect();
-		  //           }
-		  //       });
-			} else connect();
 		};
 
-		var onFail = ()=>dispatch(errorInput(true));
+		var onFail = (err)=>{
+			dispatch(errorInput(true));
+		}
 
-
-		unlockAccount60Sec(	password, onSuccess, onFail );
+		getCoinbase(
+			(coinbase)=>{unlockAccount60Sec(coinbase, password, onSuccess, onFail );},
+			onFail
+		)
+		
 
 	}
 

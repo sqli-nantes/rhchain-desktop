@@ -5,7 +5,7 @@
   "description": "RHChain",
   "main": "main.js",
   "scripts": {
-    "start": "node -r babel-register node_modules/.bin/webpack-dev-server --config ./webpack.config.development.js --hot --inline --progress"
+    "start": "node -r babel-register node_modules/.bin/webpack-dev-server --config ./webpack.config.development.js --hot --inline --progress --watch"
   },
   "devEngines": {
     "node": "4.x || 5.x || 6.x",

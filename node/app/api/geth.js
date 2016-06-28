@@ -5,7 +5,6 @@ BigNumber.config({ERRORS: false});
 import {create} from '../utils/web3IPCExtension';
 import ethereumConfig from '../../ethereum.json';
 
-
 function extractMessage(errorObject){return !errorObject ? null : errorObject.message.split(':')[1];};
 
 /* Convert from number of voters to percentage */
@@ -61,44 +60,49 @@ function waitTxMining(txHash, onSuccess , onFail){
     });
 }
 
-function deleteFolderRecursive(path) {
-  // if( fs.existsSync(path) ) {
-  //   fs.readdirSync(path).forEach(function(file,index){
-  //     var curPath = path + "/" + file;
-  //     if(fs.lstatSync(curPath).isDirectory()) { // recurse
-  //       deleteFolderRecursive(curPath);
-  //     } else { // delete file
-  //       fs.unlinkSync(curPath);
-  //     }
-  //   });
-  //   fs.rmdirSync(path);
-  // }
-};
-
-export const web3 = create(ethereumConfig.file);
+export const web3 = create();
 export const contract = web3.eth.contract(ethereumConfig.contractAbi).at(ethereumConfig.contractAddress);
 export const GAS = 900000;
 
-export function unlockAccount60Sec(password,onSuccess,onFail){
-    web3.personal.unlockAccount(
-            ethereumConfig.accountAddress,
-            password,
-            60,(errUnlock,unlocked)=>{
-                if( !errUnlock && unlocked ) onSuccess();
-                else onFail(errUnlock);
-            });
+export function unlockAccount60Sec(address,password,onSuccess,onFail){
+
+     web3.personal.unlockAccount(
+        address,
+        password,
+        60,(errUnlock,unlocked)=>{
+            console.log(errUnlock,unlocked)
+            if( !errUnlock && unlocked ){
+                isAdmin(onSuccess,onFail);
+            }
+            else onFail(errUnlock);
+        }
+    );
+   
+}
+
+export function getCoinbase(onSuccess,onFail){
+    web3.eth.getCoinbase((errCoinbase,coinbase)=>{
+        if( errCoinbase ) onFail(errCoinbase);
+        onSuccess(coinbase);
+    });
 }
 
 export function submitAnswers(answers, onSuccess, onFail){
-    unlockAccount60Sec( ethereumConfig.accountPassword,
-                        ()=>contract.submit.sendTransaction(
-                                answers,
-                                {from:ethereumConfig.accountAddress,gas:GAS},
-                                (errTx,txHash)=>{
-                                    waitTxMining(txHash,onSuccess, onFail)
-                                }),
-                        (errUnlock)=>onFail(extractMessage(errUnlock))
-    );
+    getCoinbase(
+        (coinbase)=>{
+                        unlockAccount60Sec( coinbase,
+                                            localStorage.getItem('passwd'),
+                                            ()=>contract.submit.sendTransaction(
+                                                    answers,
+                                                    {from:coinbase,gas:GAS},
+                                                    (errTx,txHash)=>{
+                                                        waitTxMining(txHash,onSuccess, onFail)
+                                                    }),
+                                            (errUnlock)=>onFail(extractMessage(errUnlock))
+                        );
+        },
+        onFail);
+   
 }
 
 export function adminEventSubscription(onSuccess,onFail){
@@ -115,18 +119,27 @@ export function collabEventSubscription(onSuccess,onFail){
     });
 }
 
+// If vote is closed or not
 export function getVoteState(onSuccess,onFail){
-    contract.closed((err,res)=>{
-        if( !err ){
-            if( res ){
-                contract.getResults.call((err,results)=>{
-                    if( !err ) onSuccess(formatResults(results[1]));
-                    else onFail(extractMessage(err));
-                })
-            }
-        }
-        else onFail(extractMessage(err));
-    });
+    getCoinbase(
+        (coinbase)=>{
+            contract.closed((err,res)=>{
+                if( !err ){
+                    if( res ){
+                        contract.getResults.call(
+                            {from:coinbase,gas:GAS},
+                            (err,results)=>{
+                                if( !err ) onSuccess(formatResults(results[1]));
+                                else onFail(extractMessage(err));
+                            }
+                        )
+                    }
+                }
+                else onFail(extractMessage(err));
+            });
+        },
+        onFail
+    );
 }
 
 export function getLabels(onSuccess,onFail){
@@ -153,92 +166,86 @@ export function getAdminResults(onSuccess,onFail){
 }
 
 export function getCollabSubmission(onResult,onSuccess,onFail){
-    contract.mySubmission.call((err,value)=>{
-        if( err ){
-          onFail(extractMessage(err));
-          return;
-        }
-        if( value[0] ){
-            value[1].map((questionAnswer,index)=>{
-                onResult(index,questionAnswer);
-            });
-            onSuccess();
-        }
-    });
+    getCoinbase(
+        (coinbase)=>{
+            contract.mySubmission.call(
+                {from:coinbase,gas:GAS},
+                (err,value)=>{
+                    if( err ){
+                      onFail(extractMessage(err));
+                      return;
+                    }
+                    if( value[0] ){
+                        value[1].map((questionAnswer,index)=>{
+                            onResult(index,questionAnswer);
+                        });
+                        onSuccess();
+                    }
+                }
+            );
+        },
+        onFail
+    );
 }
 
 export function closeVote(visibilities,onSuccess,onFail){
 
-    unlockAccount60Sec( ethereumConfig.accountPassword,
-                        ()=> contract.close.sendTransaction(
-                                    visibilities,
-                                    {from:ethereumConfig.accountAddress,gas:GAS},
-                                    function(errTx,txHash){
-                                        waitTxMining(txHash, onSuccess, onFail)
-                                    }),
-                        (errUnlock)=>onFail(extractMessage(errUnlock))
-  );
+    getCoinbase(
+        (coinbase)=>{
+                        unlockAccount60Sec( coinbase,
+                                            localStorage.getItem('passwd'),
+                                            ()=> contract.close.sendTransaction(
+                                                        visibilities,
+                                                        {from:coinbase,gas:GAS},
+                                                        function(errTx,txHash){
+                                                            waitTxMining(txHash, onSuccess, onFail)
+                                                        }),
+                                            (errUnlock)=>onFail(extractMessage(errUnlock))
+                        );
+        },
+        onFail);
+    
 }
 
 export function createAccount(password,onSuccess,onFail){
 
-    var toDelete = [
-        ethereumConfig.gethDataPath+'nodekey',
-        ethereumConfig.gethDataPath+'nodes',
-        ethereumConfig.gethDataPath+'keystore'
-    ];
-
-    for(var i=0;i<toDelete.length;i++){
-        try{
-            // var stats = fs.statSync(toDelete[i]);
-            // if( stats.isFile() ) fs.unlinkSync(toDelete[i]);
-            // else deleteFolderRecursive(toDelete[i]);
-        }catch(e){
-            console.log("file not exists",e);
-        }
-    }
-
     web3.personal.newAccount(password,function(err,address){
         if( err ){ console.log(err);onFail();return; }
 
-        ethereumConfig.accountAddress = address;
-        ethereumConfig.accountPassword = password;
-        ethereumConfig.isAdmin=false;
-        ethereumConfig.isFirstConnection = false;
+        web3.miner.setEtherbase(address,(errBase, set)=>{
 
-        fs.writeFile('./ethereum.json',JSON.stringify(ethereumConfig),function(errWrite){
-
-            if( !errWrite ){
-                web3.miner.setEtherbase(address,(errBase, set)=>{
-                    if( errBase || !set ) onFail();
-                    else onSuccess();
-                });
-            } else onFail();
+            if( errBase || !set ) onFail();
+            else onSuccess();
         });
     })
 }
 
 export function mineOneBlock(onSuccess,onFail){
 
-    web3.miner.start((errStart,resStart)=>{
-        if( !errStart ){
-            var filter = web3.eth.filter("latest").watch(function(errWatch,blockHash){
-                if( !errWatch ){
-                    web3.eth.getBlock(blockHash,function(errBlock,block){
-                        if( !errBlock ){
-                            if( block.miner == ethereumConfig.accountAddress ){
-                                filter.stopWatching();
-                                web3.miner.stop((errStop,resStop)=>{
-                                    if( !errStop ) onSuccess();
-                                    else onFail(extractMessage(errStop));
-                                });
-                            }
-                        } else onFail(extractMessage(errBlock));
+    getCoinbase(
+        (coinbase)=>{
+            web3.miner.start((errStart,resStart)=>{
+                if( !errStart ){
+                    var filter = web3.eth.filter("latest").watch(function(errWatch,blockHash){
+                        if( !errWatch ){
+                            web3.eth.getBlock(blockHash,function(errBlock,block){
+                                if( !errBlock ){
+                                    if( block.miner == coinbase ){
+                                        filter.stopWatching();
+                                        web3.miner.stop((errStop,resStop)=>{
+                                            if( !errStop ) onSuccess();
+                                            else onFail(extractMessage(errStop));
+                                        });
+                                    }
+                                } else onFail(extractMessage(errBlock));
+                            });
+                        } else onFail(extractMessage(errWatch));
                     });
-                } else onFail(extractMessage(errWatch));
+                } else onFail(extractMessage(errStart));
             });
-        } else onFail(extractMessage(errStart));
-    });
+        },
+        onFail
+    );
 }
 export function startMiner(){
     web3.miner.start(()=>{console.log("miner démarré")});
@@ -248,6 +255,15 @@ export function stopMiner(){
     web3.miner.stop(()=>{console.log("miner arrêté")});
 }
 
+export function isAdmin(onSuccess,onFail){
+    web3.eth.getAccounts((errAccounts,accounts)=>{
+        if( errAccounts || accounts.length == 0 ) onFail(errAccounts)
+        getCoinbase(
+            (coinbase)=> onSuccess(accounts[0] == coinbase),
+            onFail
+        );
+    });
+}
 
 
 
