@@ -10,10 +10,11 @@ const config = {
 
   devtool: 'cheap-module-eval-source-map',
 
-  entry: {
-    app: './app/index.js',
-    vendor: ['react']
-  },
+  entry: [
+    'webpack/hot/dev-server',
+    'webpack/hot/only-dev-server',
+    './app/index.js'
+  ],
 
   output: {
     ...baseConfig.output,
