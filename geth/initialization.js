@@ -29,23 +29,26 @@ compiled = eth.compile.solidity(sources).RHChain;
 personal.unlockAccount(eth.coinbase,ADMIN_PASSWORD);
 
 /* Instantiate contract */
-rhchain = eth.contract(compiled.info.abiDefinition).new(questions,proposals,{from: eth.coinbase, data: compiled.code, gas: GAS});
+rhchain = eth.contract(compiled.info.abiDefinition).new(questions,proposals,{from: eth.coinbase, data: compiled.code, gas: GAS},function(err,res){
+	
+	/** Save contract address **/
+	if( res.address != undefined  ) {console.log("CONTRACT_ADDRESS:"+res.address);}
+
+});
 
 /* Deploy contract */
 miner.start();
-admin.sleepBlocks(1);
+admin.sleepBlocks(3);
 miner.stop();
-
 
 /* Save infos */
 	/** Save abi **/
-admin.saveInfo(compiled.info,"abi.json") 
-	/** Save contract address **/
-console.log("###{CONTRACT_ADDRESS:"+rhchain.address+"}###");
-	/** Save enode **/
-console.log("###{ENODE:"+admin.nodeInfo.id+"}###");
+admin.saveInfo(compiled.info,admin.datadir+"/abi.json") 
 	/** Save admin address **/
-console.log("###{ADMIN_ADDRESS:"+eth.coinbase+"}###");
+console.log("ADMIN_ADDRESS:"+eth.coinbase);
+	/** Save enode **/
+console.log("ENODE:"+admin.nodeInfo.enode);
+
 
 
 
