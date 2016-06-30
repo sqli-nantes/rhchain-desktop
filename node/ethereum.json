@@ -1,10 +1,5 @@
 {
-	"gethDataPath":"GETH_DATA_PATH",
-	"file":"IPC_FILE_PATH",
 	"contractAddress":"CONTRACT_ADDRESS",
 	"contractAbi": "CONTRACT_ABI" ,
-	"accountPassword":"",
 	"accountAddress":"ACCOUNT_ADDRESS",
-	"isAdmin":true,
-	"isFirstConnection":true
 }
