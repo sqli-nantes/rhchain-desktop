@@ -77,7 +77,6 @@ export function unlockAccount60Sec(address,password,onSuccess,onFail){
             else onFail(errUnlock);
         }
     );
-   
 }
 
 export function getCoinbase(onSuccess,onFail){
@@ -150,10 +149,12 @@ export function getLabels(onSuccess,onFail){
 
 export function getAdminVisibilities(onSuccess,onFail){
     contract.getVisibilities.call((err,value)=>{
-        if( !err && value[0] ){
-            value[1].map((questionVisibility,index)=>{
-                onSuccess(index,questionVisibility);
-            });
+        if( !err ){
+            if( value[0] ){
+                value[1].map((questionVisibility,index)=>{
+                    onSuccess(index,questionVisibility);
+                });
+            }
         } else onFail(extractMessage(err));
     });
 }

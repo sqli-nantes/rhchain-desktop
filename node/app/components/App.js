@@ -27,12 +27,12 @@ export default class App extends Component {
         <div className="container-fluid">
           {this.props.children}
           {
-            (() => {
-              if (process.env.NODE_ENV !== 'production') {
-                const DevTools = require('./DevTools'); // eslint-disable-line global-require
-                return <DevTools />;
-              }
-            })()
+            // (() => {
+            //   if (process.env.NODE_ENV !== 'production') {
+            //     const DevTools = require('./DevTools'); // eslint-disable-line global-require
+            //     return <DevTools />;
+            //   }
+            // })()
           }
         </div>
       </MuiThemeProvider>

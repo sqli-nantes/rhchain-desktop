@@ -57,7 +57,12 @@ const config = {
   ],
   devServer: {
     contentBase: path.resolve(__dirname, './app/'),
-    port: 3000
+    devtool: 'eval',
+    hot: true,
+    historyApiFallback: true,
+    inline: true,
+    host: "0.0.0.0",
+    port: 3000,
   },
 };
 
