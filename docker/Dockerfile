@@ -46,7 +46,6 @@ RUN apt-get update && \
    apt-get dist-upgrade -y && \
    apt-get install -y software-properties-common && \ 
    add-apt-repository -y ppa:ethereum/ethereum && \
-   add-apt-repository -y ppa:ethereum/ethereum-dev && \
    apt-get update && \
    apt-get install -y geth solc jq
 
@@ -97,4 +96,4 @@ EXPOSE $RPC_PORT
 #-------- ENTRYPOINT -------- 
 #----------------------------
 
-CMD /home/startup.sh $IP $GETH_DATA_PATH $GETH_PORT $NODE_DATA_PATH $GETH_STATIC_NODE_FILE_PATH $NETWORK_ID $RPC_ADDRESS $RPC_PORT
+CMD /home/startup.sh $IP $IS_ADMIN $GETH_DATA_PATH $GETH_PORT $NODE_DATA_PATH $GETH_STATIC_NODE_FILE_PATH $NETWORK_ID $RPC_ADDRESS $RPC_PORT 

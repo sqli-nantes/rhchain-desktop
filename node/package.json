@@ -17,7 +17,7 @@
     "color": "^0.11.1",
     "css-modules-require-hook": "^4.0.1",
     "font-awesome": "^4.6.3",
-    "material-ui": "^0.15.0",
+    "material-ui": "0.15.0",
     "postcss": "^5.0.21",
     "react": "^15.1.0",
     "react-chartjs": "^0.7.3",

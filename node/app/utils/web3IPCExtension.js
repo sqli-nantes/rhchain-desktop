@@ -3,7 +3,12 @@ var web3 = new Web3();
 
 export function create(){
 
-	web3.setProvider(new Web3.providers.HttpProvider('http://localhost:3001')); //TODO externaliser
+	var address = window.location.origin;
+	var addressSplit = address.split(':');
+	addressSplit[2] = parseInt(window.location.port)+1;
+	address = addressSplit.join(':');
+
+	web3.setProvider(new Web3.providers.HttpProvider(address)); //TODO externaliser
  
 	web3._extend({
 		property: 'miner',
