@@ -70,7 +70,6 @@ export function unlockAccount60Sec(address,password,onSuccess,onFail){
         address,
         password,
         60,(errUnlock,unlocked)=>{
-            console.log(errUnlock,unlocked)
             if( !errUnlock && unlocked ){
                 isAdmin(onSuccess,onFail);
             }
