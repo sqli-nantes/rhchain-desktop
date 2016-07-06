@@ -1,5 +1,5 @@
 {
-	"contractAddress":"0xf1da4c3cb8d13f30ac13593552a990e0cc4a735b",
-	"contractAbi": [{"constant":false,"inputs":[],"name":"getVisibilities","outputs":[{"name":"","type":"bool"},{"name":"","type":"bool[3]"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"answers","outputs":[{"name":"","type":"bytes32"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"questions","outputs":[{"name":"","type":"bytes32"}],"type":"function"},{"constant":false,"inputs":[],"name":"getResults","outputs":[{"name":"","type":"bool"},{"name":"","type":"int256[3][3]"}],"type":"function"},{"constant":true,"inputs":[],"name":"closed","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":false,"inputs":[{"name":"_visibilities","type":"bool[3]"}],"name":"close","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":false,"inputs":[],"name":"mySubmission","outputs":[{"name":"","type":"bool"},{"name":"","type":"uint8[3]"}],"type":"function"},{"constant":false,"inputs":[{"name":"answ","type":"uint8[3]"}],"name":"submit","outputs":[{"name":"","type":"bool"}],"type":"function"},{"inputs":[{"name":"quests","type":"bytes32[3]"},{"name":"answ","type":"bytes32[3]"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"results","type":"int256[3][3]"}],"name":"newResults","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"results","type":"int256[3][3]"}],"name":"over","type":"event"}] ,
-	"accountAddress":"0x8ed89da179c2ce5db3860ce9f2014a4cc89a00f4"
+	"contractAddress":"CONTRACT_ADDRESS",
+	"contractAbi": "CONTRACT_ABI" ,
+	"accountAddress":"ACCOUNT_ADDRESS"
 }
