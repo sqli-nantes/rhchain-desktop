@@ -66,8 +66,8 @@ RUN npm install --prefix $NODE_DATA_PATH
 #------ INIT GETH NODE ------ 
 #----------------------------
 
-RUN geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID init $GETH_DATA_PATH/genesis.json
-RUN geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID --jspath $GETH_DATA_PATH js $GETH_DATA_PATH/initialization.js > $TMP_INIT_LOG
+RUN geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID --nodiscover --ipcdisable init $GETH_DATA_PATH/genesis.json
+RUN geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID --jspath $GETH_DATA_PATH --nodiscover --ipcdisable js $GETH_DATA_PATH/initialization.js > $TMP_INIT_LOG
 
 #----------------------------
 #---- PREPARE GETH PARAMS --- 
