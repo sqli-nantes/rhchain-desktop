@@ -48,6 +48,7 @@ export default class Administrator extends Component {
 												style={styles.button}
 												labelStyle={styles.button.label}
 												label="Valider et publier"
+												disabled={!home.hasMoney} 
 												onClick={()=>submit(true)} />);
     return (
     	<div style={styles.root}>

@@ -1,5 +1,5 @@
 
-import {getVoteState,mineOneBlock} from '../api/geth';
+import {getVoteState,mineOneBlock,checkBalance} from '../api/geth';
 
 
 export function initState(){
@@ -18,12 +18,11 @@ export function initState(){
   }
 }
 
-export const MINE = 'MINE';
 export function mine(){
   return (dispatch)=>{
 
     var onSuccess = ()=>{
-      dispatch(showInfo("Vous avez miné un bloc", INFO_TYPES.SUCCESS));
+      dispatch(checkPositiveBalance());
     }
 
     var onFail = ()=>{
@@ -40,6 +39,7 @@ export function submit() {
     type: SUBMIT
   };
 }
+
 export const LOAD = 'LOAD';
 export function load(load) {
   return {
@@ -116,4 +116,30 @@ export function setOver(over){
     type: SET_OVER,
     payload: {over: over}
   };
+}
+
+export const HAS_MONEY = 'HAS_MONEY';
+export function hasMoney(money){ 
+  return {
+    type: HAS_MONEY,
+    payload: {hasMoney: money}
+  } 
+}
+
+export function checkPositiveBalance(){
+
+  return (dispatch)=>{
+
+    var onSuccess = (balance)=>{
+      dispatch(hasMoney(balance>0))
+    }
+
+    var onFail = (error)=>{
+      console.log(error);
+      dispatch(hasMoney(false))
+    }
+
+    checkBalance(onSuccess,onFail);
+  }
+
 }

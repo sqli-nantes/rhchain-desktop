@@ -265,6 +265,17 @@ export function isAdmin(onSuccess,onFail){
     });
 }
 
+export function checkBalance(onSuccess,onFail){
+    getCoinbase(
+        (coinbase)=>{
+            web3.eth.getBalance(coinbase,(err,res)=>{
+                if( err ) onFail(extractMessage(err));
+                else onSuccess(parseFloat(new BigNumber(res).toFixed()));
+            })
+        }
+    )
+}
+
 
 
 

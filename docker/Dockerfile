@@ -7,8 +7,11 @@ FROM nodesource/trusty:5.11.0
 #----------------------------
 #-------- VARIABLES --------- 
 #----------------------------
-ENV GETH_DATA_PATH /home/geth
-ENV NODE_DATA_PATH /home/node
+
+ENV ROOT /home
+
+ENV GETH_DATA_PATH $ROOT/geth
+ENV NODE_DATA_PATH $ROOT/node
 
 ENV ETHEREUM_CONFIG_FILE_PATH $NODE_DATA_PATH/ethereum.json
 ENV GETH_STATIC_NODE_FILE_PATH $GETH_DATA_PATH/static-nodes.json
@@ -28,16 +31,6 @@ ENV NODE_PORT 3000
 ENV ETHEREUM_NETWOR_ID 100
 
 #----------------------------
-#------- IMPORT FILES ------- 
-#----------------------------
-
-COPY geth/contract.js geth/contract.sol geth/genesis.json geth/initialization.js $GETH_DATA_PATH/
-COPY node/app $NODE_DATA_PATH/app
-COPY node/*.js node/.* node/*.json $NODE_DATA_PATH/ 
-COPY docker/startup.sh /home/
-RUN chmod +x /home/startup.sh
-
-#----------------------------
 #------ INSTALL TOOLS ------- 
 #----------------------------
 
@@ -47,7 +40,17 @@ RUN apt-get update && \
    apt-get install -y software-properties-common && \ 
    add-apt-repository -y ppa:ethereum/ethereum && \
    apt-get update && \
-   apt-get install -y geth solc jq
+   apt-get install -y geth solc jq 
+
+#----------------------------
+#------- IMPORT FILES ------- 
+#----------------------------
+
+COPY geth/contract.js geth/contract.sol geth/genesis.json geth/initialization.js $GETH_DATA_PATH/
+COPY node/app $NODE_DATA_PATH/app
+COPY node/*.js node/.* node/*.json $NODE_DATA_PATH/ 
+COPY docker/startup.sh $ROOT
+RUN chmod +x $ROOT/startup.sh
 
 #----------------------------
 #- EXTRACT CONTRACT SOURCES - 
@@ -96,4 +99,4 @@ EXPOSE $RPC_PORT
 #-------- ENTRYPOINT -------- 
 #----------------------------
 
-CMD /home/startup.sh $BOOTNODE $GETH_DATA_PATH $GETH_PORT $NODE_DATA_PATH $GETH_STATIC_NODE_FILE_PATH $NETWORK_ID $RPC_ADDRESS $RPC_PORT $GETH_STATIC_NODE_FILE_PATH
+CMD $ROOT/startup.sh $BOOTNODE $GETH_DATA_PATH $GETH_PORT $NODE_DATA_PATH $GETH_STATIC_NODE_FILE_PATH $NETWORK_ID $RPC_ADDRESS $RPC_PORT $GETH_STATIC_NODE_FILE_PATH

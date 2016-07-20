@@ -43,6 +43,7 @@ export default class Home extends Component {
   componentDidMount(){
     this.props.initState();
     this.props.mine();
+    this.props.checkPositiveBalance();
   }
 
   render() {

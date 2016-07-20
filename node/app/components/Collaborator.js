@@ -53,17 +53,14 @@ export default class Collaborator extends Component {
 		if( home.over ) step = 4;
 		else if( collaborator.hasVoted ) step = 3;
 		else if( home.loading ) step = 2;
-		else if( collaborator.canSubmit ) step = 1;
-
-		var disabled = !collaborator.canSubmit
-
+		else if( collaborator.canSubmit && home.hasMoney ) step = 1;
 
 		var button = step > 2 ? null :	<RaisedButton	
 											secondary={true} 
 											style={styles.footer.button}
 											labelStyle={styles.footer.button.label}
 											label="Soumettre"
-											disabled={disabled} 
+											disabled={step==0} 
 											onClick={submit}/>
 
 		var questionItem = home.over ? 

@@ -4,7 +4,8 @@ import { 	SUBMIT, LOAD, CANCEL,
 			RECEIVE_NEW_RESULTS,  
 			SHOW_RESULTS,
 			SHOW_INFO, HIDE_INFO,
-			SET_OVER } from '../actions/homeActions';
+			SET_OVER,
+			HAS_MONEY } from '../actions/homeActions';
 
 export const initialRootState = {
 	answersLabel: [
@@ -28,15 +29,15 @@ export const initialRootState = {
 	questions: [
 		{
 			id: 0,
-			text: "Êtes-vous satisfait(e) de l’ambiance de travail au sein de l’agence ?"
+			text: "Question 1"
 		},
 		{
 			id: 1,
-			text: "Êtes-vous satisfait(e) des informations qui vous sont transmises, concernant la situation et les perspectives de l’agence et du groupe ?",
+			text: "Question 2",
 		},
 		{
 			id: 2,
-			text: "Êtes-vous satisfait(e) de votre mission actuelle ?"
+			text: "Question 3"
 		}
 	],
 	results: [],
@@ -47,7 +48,8 @@ export const initialRootState = {
 	},
 	over: false,
 	hasSubmitted: false,
-	loading: false
+	loading: false,
+	hasMoney: false
 }
 
 
@@ -61,12 +63,13 @@ export default function app(state = initialRootState,action){
 		case CANCEL:
 			return Object.assign({},state,{hasSubmitted: false,loading: false});
 
+		case HAS_MONEY:
+			return Object.assign({},state,{hasMoney:action.payload.hasMoney});
+
 		case FETCH_DATA_HASH:
 			return state;
-
 		case RECEIVE_DATA_HASH:
 			return state;
-
 		case FETCH_DATA_STRING:
 			return state;
 		case RECEIVE_DATA_STRING:
@@ -89,6 +92,7 @@ export default function app(state = initialRootState,action){
 
 		case SET_OVER:
 			return Object.assign({},state,{over: action.payload.over});
+
 
 		default:
 			return state;
