@@ -66,7 +66,10 @@ export const CREATE_AND_LOGIN = 'CREATE_AND_LOGIN';
 export function createAndLogin(password,validation){
 
 	return (dispatch)=>{
-		if( password != validation ) dispatch(errorInput(true));
+		if( password != validation || password.length==0){
+			dispatch(errorInput(true));
+			return;
+		}
 
 		createAccount(password,
 			()=>dispatch(login(password)),

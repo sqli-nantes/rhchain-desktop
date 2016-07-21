@@ -43,14 +43,18 @@ RUN apt-get update && \
    apt-get install -y geth solc jq 
 
 #----------------------------
-#------- IMPORT FILES ------- 
+#---- GENERATE DAG (1Go) ---- 
+#---- avoid long rebuild ----
+#----------------------------
+
+RUN mkdir ~/.ethash
+RUN geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID makedag 0 ~/.ethash
+
+#----------------------------
+#---- IMPORT GETH FILES ----- 
 #----------------------------
 
 COPY geth/contract.js geth/contract.sol geth/genesis.json geth/initialization.js $GETH_DATA_PATH/
-COPY node/app $NODE_DATA_PATH/app
-COPY node/*.js node/.* node/*.json $NODE_DATA_PATH/ 
-COPY docker/startup.sh $ROOT
-RUN chmod +x $ROOT/startup.sh
 
 #----------------------------
 #- EXTRACT CONTRACT SOURCES - 
@@ -60,20 +64,30 @@ RUN sed -i ':a;N;$!ba;s/\n/ /g' $CONTRACT_SOURCES
 RUN sed -i -e "s/CONTRACT_SOURCE_CODE/$(sed 's:/:\\/:g' $CONTRACT_SOURCES)/" $CONTRACT_JS
 
 #----------------------------
-#------ INIT NODEJS APP ----- 
-#----------------------------
-
-RUN npm install --prefix $NODE_DATA_PATH
-
-#----------------------------
 #------ INIT GETH NODE ------ 
 #----------------------------
 
 RUN geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID --nodiscover --ipcdisable init $GETH_DATA_PATH/genesis.json
 RUN geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID --jspath $GETH_DATA_PATH --nodiscover --ipcdisable js $GETH_DATA_PATH/initialization.js > $TMP_INIT_LOG
 
+
 #----------------------------
-#---- PREPARE GETH PARAMS --- 
+#---- IMPORT AND INSTALL ----
+#----- NODE DEPENDENCIES ---- 
+#----------------------------
+
+COPY node/*.js node/.* node/*.json $NODE_DATA_PATH/ 
+RUN npm install --prefix $NODE_DATA_PATH
+
+#----------------------------
+#------ IMPORT NODE APP -----
+#----------------------------
+
+COPY node/app $NODE_DATA_PATH/app
+
+
+#----------------------------
+#---- EXTRACT GETH PARAMS --- 
 #----------------------------
 
 RUN sed -i -- 's#"CONTRACT_ABI"#'$( cat $TMP_CONTRACT_INFO | jq -c .abiDefinition )'#g' $ETHEREUM_CONFIG_FILE_PATH
@@ -96,7 +110,15 @@ EXPOSE $NODE_PORT
 EXPOSE $RPC_PORT
 
 #----------------------------
+#---- IMPORT STARTUP FILE --- 
+#----------------------------
+
+COPY docker/startup.sh $ROOT
+RUN chmod +x $ROOT/startup.sh
+
+#----------------------------
 #-------- ENTRYPOINT -------- 
 #----------------------------
 
 CMD $ROOT/startup.sh $BOOTNODE $GETH_DATA_PATH $GETH_PORT $NODE_DATA_PATH $GETH_STATIC_NODE_FILE_PATH $NETWORK_ID $RPC_ADDRESS $RPC_PORT $GETH_STATIC_NODE_FILE_PATH
+
