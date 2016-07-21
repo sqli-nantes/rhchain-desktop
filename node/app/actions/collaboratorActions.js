@@ -69,15 +69,15 @@ export function validSubmit() {
     dispatch(load(true));
 
     var onSuccess = ()=>{
+      stopMiner();
       dispatch( hasVoted() );
       dispatch( cancel() );
       dispatch( showInfo("Votre choix a bien été pris en compte",INFO_TYPES.SUCCESS) );
-      stopMiner();
     };
     var onFail = (message)=>{
+      stopMiner();
       dispatch(cancel());
       dispatch(showInfo(message,INFO_TYPES.ERROR));
-      stopMiner();
     };
 
     startMiner();

@@ -68,16 +68,16 @@ export function validSubmit() {
     dispatch(load(true))
 
     var onSuccess = ()=>{
+      stopMiner();
       dispatch( cancel() );
       dispatch( setOver(true) );
       dispatch( showInfo("Vous venez de terminer le vote",INFO_TYPES.SUCCESS) );
-      stopMiner();
     };
 
     var onFail = (message)=>{
+      stopMiner();
       dispatch( cancel() );
       dispatch( showInfo(message,INFO_TYPES.ERROR) );
-      stopMiner();
     };
 
     startMiner();

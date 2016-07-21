@@ -1,5 +1,5 @@
 
-import {getVoteState,mineOneBlock,checkBalance} from '../api/geth';
+import {getVoteState,mineOneBlock,checkBalance,stopMiner} from '../api/geth';
 
 
 export function initState(){
@@ -26,6 +26,7 @@ export function mine(){
     }
 
     var onFail = ()=>{
+      stopMiner();
       dispatch(showInfo("Échec du minage", INFO_TYPES.ERROR));
     }
 

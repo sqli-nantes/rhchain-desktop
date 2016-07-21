@@ -41,7 +41,6 @@ export function login(password) {
 			(coinbase)=>{unlockAccount60Sec(coinbase, password, onSuccess, onFail );},
 			onFail
 		)
-		
 
 	}
 
