@@ -15,19 +15,19 @@ contract RHChain {
 
     modifier onlyAdmin {
         if( msg.sender != admin ) throw;
-        _
+        _;
     }
     modifier onlyCollab{
         if( msg.sender == admin ) throw;
-        _
+        _;
     }
     modifier onlyOnce{
        if( hasSubmitted[msg.sender] ) throw;
-       _
+       _;
     }
     modifier onlyOpened {
         if( closed ) throw;
-        _
+        _;
     }
     
     function RHChain(bytes32[3] quests, bytes32[3] answ){
