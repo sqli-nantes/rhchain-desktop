@@ -19,7 +19,6 @@ ENV CONTRACT_SOURCES $GETH_DATA_PATH/contract.sol
 ENV CONTRACT_JS $GETH_DATA_PATH/contract.js
 
 ENV TMP_INIT_LOG $GETH_DATA_PATH/init.tmp.log
-ENV TMP_CONTRACT_INFO $GETH_DATA_PATH/abi.json
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -70,7 +69,6 @@ RUN sed -i -e "s/CONTRACT_SOURCE_CODE/$(sed 's:/:\\/:g' $CONTRACT_SOURCES)/" $CO
 RUN geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID --nodiscover --ipcdisable init $GETH_DATA_PATH/genesis.json
 RUN geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID --jspath $GETH_DATA_PATH --nodiscover --ipcdisable js $GETH_DATA_PATH/initialization.js > $TMP_INIT_LOG
 
-
 #----------------------------
 #---- IMPORT AND INSTALL ----
 #----- NODE DEPENDENCIES ---- 
@@ -90,7 +88,7 @@ COPY node/app $NODE_DATA_PATH/app
 #---- EXTRACT GETH PARAMS --- 
 #----------------------------
 
-RUN sed -i -- 's#"CONTRACT_ABI"#'$( cat $TMP_CONTRACT_INFO | jq -c .abiDefinition )'#g' $ETHEREUM_CONFIG_FILE_PATH
+RUN sed -i -- 's#"CONTRACT_ABI"#'$( grep -Po '(?<=(\-\-\>)).*(?=\<\-\-)' $TMP_INIT_LOG )'#g' $ETHEREUM_CONFIG_FILE_PATH
 RUN sed -i -- 's#CONTRACT_ADDRESS#'$(grep -oP "(?<=CONTRACT_ADDRESS:).*" $TMP_INIT_LOG)'#g' $ETHEREUM_CONFIG_FILE_PATH
 RUN sed -i -- 's#ACCOUNT_ADDRESS#'$(grep -oP "(?<=ADMIN_ADDRESS:).*" $TMP_INIT_LOG)'#g' $ETHEREUM_CONFIG_FILE_PATH
 RUN echo "[\""$(grep -oP "(?<=ENODE:).*" $TMP_INIT_LOG)"\"]" > $GETH_STATIC_NODE_FILE_PATH
@@ -99,7 +97,7 @@ RUN echo "[\""$(grep -oP "(?<=ENODE:).*" $TMP_INIT_LOG)"\"]" > $GETH_STATIC_NODE
 #---- CLEAR UNUSED FILES ---- 
 #----------------------------
 
-RUN rm $TMP_INIT_LOG $TMP_CONTRACT_INFO $CONTRACT_JS $CONTRACT_SOURCES
+RUN rm $TMP_INIT_LOG $CONTRACT_JS $CONTRACT_SOURCES
 
 #----------------------------
 #------ EXPOSE PORTS -------- 

@@ -43,7 +43,7 @@ miner.stop();
 
 /* Save infos */
 	/** Save abi **/
-admin.saveInfo(compiled.info,admin.datadir+"/abi.json") 
+console.log("-->"+JSON.stringify(compiled.info.abiDefinition)+"<--");
 	/** Save admin address **/
 console.log("ADMIN_ADDRESS:"+eth.coinbase);
 	/** Save enode **/
