@@ -2,7 +2,7 @@
 #-------- SRC IMAGE --------- 
 #----------------------------
 
-FROM nodesource/trusty:5.11.0
+FROM nodesource/trusty:6.3.0
 
 #----------------------------
 #-------- VARIABLES --------- 

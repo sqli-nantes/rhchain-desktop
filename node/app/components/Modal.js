@@ -25,7 +25,7 @@ const styles = {
   }
 }
 
-export default class Modal extends Component {
+export class Modal extends Component {
   render() {
     const { loading, hasSubmitted, cancel, onSubmit} = this.props;
     var content = loading ? 

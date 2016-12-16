@@ -25,7 +25,7 @@ const styles = {
   },
 }
 
-export default class QuestionItemAdministrator extends Component {
+export class QuestionItemAdministrator extends Component {
 
   render() {
     const { idQuestion, visibility, setVisibility, results, labels, over } = this.props;

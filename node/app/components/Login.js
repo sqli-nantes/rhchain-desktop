@@ -54,7 +54,7 @@ const styles={
 
 };
 
-export default class Login extends Component {
+export class Login extends Component {
 
   componentDidMount(){
     this.props.errorInput(false);

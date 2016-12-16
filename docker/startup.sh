@@ -2,9 +2,11 @@
 
 if [ ${BOOTNODE} ];then
 	sed -i -- 's#\[::\]#'$BOOTNODE'#g' $GETH_STATIC_NODE_FILE_PATH
-	rm $GETH_DATA_PATH/nodekey 
+	rm -rf $GETH_DATA_PATH/geth/nodekey 
+	echo "-------> NOT ADMIN MODE <--------"
 else
 	rm $GETH_STATIC_NODE_FILE_PATH
+	echo "-------> ADMIN MODE <--------"
 fi
 
 npm start --prefix $NODE_DATA_PATH &

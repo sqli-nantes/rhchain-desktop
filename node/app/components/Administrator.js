@@ -32,7 +32,7 @@ const styles = {
 	
 }
 
-export default class Administrator extends Component {
+export class Administrator extends Component {
 
 	componentDidMount(){
 		this.props.subscribeAdminEvents();

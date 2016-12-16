@@ -24,7 +24,7 @@ const styles = {
   }
 }
 
-export default class QuestionItemCollaborator extends Component {
+export class QuestionItemCollaborator extends Component {
 
   render() {
     const { idQuestion, labels, answers, answer } = this.props;

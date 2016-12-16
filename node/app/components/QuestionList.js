@@ -25,7 +25,7 @@ const styles = {
 	}  
 }
 
-export default class QuestionList extends Component {
+export class QuestionList extends Component {
   render() {
     const { questions } = this.props;
 

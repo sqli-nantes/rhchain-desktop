@@ -39,7 +39,7 @@ const styles = {
 	}	
 };
 
-export default class Collaborator extends Component {
+export class Collaborator extends Component {
 
 	componentDidMount(){
 		this.props.subscribeCollabEvents();
