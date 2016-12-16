@@ -38,10 +38,10 @@ Replace *ADMIN_IP* by ip of the machine running the admin container
 
 ## Local 
 
-If you want to run the demo on a single machine, modify port mapping between host and container to prevent conflicts. You can launch another user with the command : 
+If you want to run the demo on a single machine, modify port mapping between host and container to prevent conflicts, for example : 
 
 ```bash
-docker run -ti --rm -p 3010:3000 -p 30313:30303 -p 3011:3001 -e BOOTNODE="ADMIN_CONTAINER_IP" gunicolas/rhchain
+docker run -ti --rm -p 3010:3000 -p 30313:30303 -p 3011:3001 -e BOOTNODE="ADMIN_CONTAINER_IP" rhchain
 ```
 
 Replace *ADMIN_CONTAINER_IP* by ip of the container running as admin.
