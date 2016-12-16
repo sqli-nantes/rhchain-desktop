@@ -1,6 +1,6 @@
 # Installation
 
-## from sources 
+## from sources (latest version)
 
 ```bash
 git clone https://gitlab-toulouse.sqli.com/blockchain-nantes/RHChain.git
@@ -11,7 +11,7 @@ docker build -t rhchain -f docker/Dockerfile .
 
 ```
 
-## from dockerhub
+## from dockerhub (old version)
 
 ```bash
 docker pull gunicolas/rhchain
