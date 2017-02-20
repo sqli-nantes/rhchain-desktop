@@ -1,7 +1,7 @@
 version: '2'
 services:
   admin:
-    image: rhchain-beta
+    image: rhchain
     ports:
       - "30303:30303"
       - "3000:3000"
