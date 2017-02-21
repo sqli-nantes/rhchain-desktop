@@ -3,6 +3,7 @@ import { routerReducer as routing } from 'react-router-redux';
 import home from './homeReducer';
 import collaborator from './collaboratorReducer';
 import administrator from './administratorReducer';
+import registre from './registreReducer';
 import login from './loginReducer';
 
 const rootReducer = combineReducers({
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   home,
   collaborator,
   administrator,
+  registre,
   login
 });
 

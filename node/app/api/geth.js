@@ -276,8 +276,41 @@ export function checkBalance(onSuccess,onFail){
     )
 }
 
+export function sendMoneyFromCoinBase(destinataire, onSuccess, onFail){
+  console.log("get Coinbase");
+  //récuperation du compte principal
+  getCoinbase((coinbase)=>{
+    // Déblocage du compte
+    console.log("unlock du compte")
+    unlockAccount60Sec(coinbase, localStorage.getItem('passwd'),
+      ()=>{
+        // Envoie transactions
+        console.log("Envoie de 100 wei from ",coinbase,"to ",destinataire);
+        web3.eth.sendTransaction({from:coinbase,to:destinataire,value:100},
+          function(errTx,txHash){
+              waitTxMining(txHash, onSuccess, onFail)
+          }
+        );
 
+      },
+      (errUnlock)=>{onFail(extractMessage(errUnlock))}
+    )
+  });
+}
 
+export function getBalance(account, onSuccess, onFail){
+    // getCoinbase(
+    //     (coinbase)=>{
+            web3.eth.getBalance(account,(err,res)=>{
+                if( err )onFail(
+                  extractMessage(err));
+                else onSuccess(
+                  parseFloat(new BigNumber(res).toFixed())
+                );
+            })
+        // }
+    // )
+}
 
 /*
 
