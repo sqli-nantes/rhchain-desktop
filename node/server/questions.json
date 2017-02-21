@@ -1,0 +1,16 @@
+{
+  "version" :"0.0.1",
+  "questions" : [
+    { "id" : 1,
+      "libelle" : "Êtes-vous satisfait(e) de l’ambiance de travail au sein de l’agence ?"
+
+    },
+    { "id" : 2,
+      "libelle" : "Êtes-vous satisfait(e) des informations qui vous sont transmises, concernant la situation et les perspectives de l’agence et du groupe ?"
+
+    },
+    { "id" : 3,
+      "libelle" : "Êtes-vous satisfait(e) de votre mission actuelle ?"
+    }
+  ]
+}
