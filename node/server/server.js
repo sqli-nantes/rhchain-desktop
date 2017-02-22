@@ -8,7 +8,12 @@ var questionsRouter = require('./routes/questions');
 // Déclaration de l'application
 var app = express();
 var port = 8000;
+var argv = require('optimist').argv;
 
+
+if(argv.port){
+  port = argv.port;
+}
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 //app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,4 +23,5 @@ app.use(bodyParser.json());
 // all of our routes will be prefixed with /api/resources
 app.use('/api/questions', questionsRouter);
 app.use('/api/users',usersRouter);
+
 app.listen(port);
