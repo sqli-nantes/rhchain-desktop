@@ -3,7 +3,7 @@ var path = require('path');
 var jsonfile = require('jsonfile')
 var _ = require('lodash');
 
-var ressources = jsonfile.readFileSync('server/questions.json');
+var ressources = jsonfile.readFileSync('questions.json');
 
 //Variable Globales
 var questions = ressources.questions;

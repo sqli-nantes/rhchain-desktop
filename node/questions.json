@@ -2,14 +2,17 @@
   "version" :"0.0.1",
   "questions" : [
     { "id" : 1,
+      "hash" :"0xd6d82d1d3657312dc08d2108b09029bb501f8cdab6b6bbe7b9408b13d9ced6e7",
       "libelle" : "Êtes-vous satisfait(e) de l’ambiance de travail au sein de l’agence ?"
 
     },
     { "id" : 2,
+      "hash" :"0x887d8df6aaf3010c9eefed46e2ad03e7b411e84b7f37edd9af0dab6cc29cf257",
       "libelle" : "Êtes-vous satisfait(e) des informations qui vous sont transmises, concernant la situation et les perspectives de l’agence et du groupe ?"
 
     },
     { "id" : 3,
+      "hash" :"0x926ef6616a951b0d880385dd2a65850a0b50eb1edc180310ed22b821172e2b10",
       "libelle" : "Êtes-vous satisfait(e) de votre mission actuelle ?"
     }
   ]
