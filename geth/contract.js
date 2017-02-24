@@ -1,9 +1,15 @@
 GAS = 2000000;
 
-function getContractSource(){
+function getContractAbi(){
 
-    return "CONTRACT_SOURCE_CODE"     
+    return CONTRACT_SOURCE_ABI;
 }
+
+function getContractCompiled(){
+
+    return "CONTRACT_SOURCE_BIN";
+}
+
 
 function getContractQuestions(){
 	return [

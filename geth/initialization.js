@@ -11,9 +11,12 @@ miner.stop();
 
 /* Get contract source code and labels */
 loadScript('contract.js');
-sources = getContractSource();
+//sources = getContractSource(); //remplacé par ABI + compiled
+
 questions = getContractQuestions();
 proposals = getContractProposals();
+
+
 /* Compute sha3 for questions and proposals */
 	/** SAME LOOP BECAUSE EQUAL NUMBER **/
 for( i=0;i<questions.length;i++){
@@ -23,14 +26,19 @@ for( i=0;i<questions.length;i++){
 
 
 /* Compile contract */
-compiled = eth.compile.solidity(sources).RHChain;
+ // compiled = eth.compile.solidity(sources).RHChain;
+compiled = getContractCompiled();
+console.log("compiled",compiled);
+
+abi			 = getContractAbi();
+console.log("abi",abi);
 
 /* Unlock account for deployment */
 personal.unlockAccount(eth.coinbase,ADMIN_PASSWORD);
 
 /* Instantiate contract */
-rhchain = eth.contract(compiled.info.abiDefinition).new(questions,proposals,{from: eth.coinbase, data: compiled.code, gas: GAS},function(err,res){
-	
+rhchain = eth.contract(abi).new(questions,proposals,{from: eth.coinbase, data: compiled, gas: GAS},function(err,res){
+
 	/** Save contract address **/
 	if( res.address != undefined  ) {console.log("CONTRACT_ADDRESS:"+res.address);}
 
@@ -42,13 +50,9 @@ admin.sleepBlocks(3);
 miner.stop();
 
 /* Save infos */
-	/** Save abi **/
-console.log("-->"+JSON.stringify(compiled.info.abiDefinition)+"<--");
+
 	/** Save admin address **/
 console.log("ADMIN_ADDRESS:"+eth.coinbase);
+
 	/** Save enode **/
 console.log("ENODE:"+admin.nodeInfo.enode);
-
-
-
-
