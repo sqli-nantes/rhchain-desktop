@@ -34,6 +34,8 @@ COPY docker/startup.sh $ROOT
 COPY geth/contract.js geth/contract.sol geth/genesis.json geth/initialization.js $GETH_DATA_PATH/
 COPY node/*.js node/.* node/*.json $NODE_DATA_PATH/
 COPY node/app $NODE_DATA_PATH/app
+COPY node/server $NODE_DATA_PATH/server
+
 
 #installation des
 RUN apt-get update && \
