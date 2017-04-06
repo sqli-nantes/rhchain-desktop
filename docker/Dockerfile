@@ -20,7 +20,7 @@ ENV CONTRACT_JS $GETH_DATA_PATH/contract.js
 
 ENV TMP_INIT_LOG $GETH_DATA_PATH/init.tmp.log
 
-ENV DEBIAN_FRONTEND noninteractCONTRACT_JSive
+ENV DEBIAN_FRONTEND noninteractive
 
 ENV GETH_PORT 30303
 ENV NETWORK_ID 100
@@ -54,8 +54,9 @@ RUN	mkdir $GETH_DATA_PATH/tmp && \
 
 
 RUN cd /
-RUN sed -i -e "s/CONTRACT_SOURCE_BIN/$(sed 's:/:\\/:g' $GETH_DATA_PATH/tmp/RHChain.bin)/" $CONTRACT_JS
-RUN	sed -i -e "s/CONTRACT_SOURCE_ABI/$(cat $GETH_DATA_PATH/tmp/contract.sol\:RHChain.abi)/" $CONTRACT_JS
+RUN	sed -i -e "s/CONTRACT_SOURCE_ABI/$(cat $GETH_DATA_PATH/tmp/RHChain.abi)/" $CONTRACT_JS
+RUN sed -i -e "s/CONTRACT_SOURCE_BIN/0x$(sed 's:/:\\/:g' $GETH_DATA_PATH/tmp/RHChain.bin)/" $CONTRACT_JS
+
 
 RUN geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID --nodiscover --ipcdisable init $GETH_DATA_PATH/genesis.json
 RUN mkdir /root/.ethash && \
