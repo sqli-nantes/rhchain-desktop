@@ -65,7 +65,7 @@ RUN mkdir /root/.ethash && \
 RUN geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID --jspath $GETH_DATA_PATH --nodiscover --ipcdisable js $GETH_DATA_PATH/initialization.js > $TMP_INIT_LOG
 
 RUN	npm install --prefix $NODE_DATA_PATH
-RUN	sed -i -- 's#"CONTRACT_ABI"#'$( cat $GETH_DATA_PATH/tmp/contract.sol\:RHChain.abi)'#g' $ETHEREUM_CONFIG_FILE_PATH
+RUN	sed -i -- 's#"CONTRACT_ABI"#'$( cat $GETH_DATA_PATH/tmp/RHChain.abi)'#g' $ETHEREUM_CONFIG_FILE_PATH
 RUN sed -i -- 's#CONTRACT_ADDRESS#'$(grep -oP "(?<=CONTRACT_ADDRESS:).*" $TMP_INIT_LOG)'#g' $ETHEREUM_CONFIG_FILE_PATH
 RUN sed -i -- 's#ACCOUNT_ADDRESS#'$(grep -oP "(?<=ADMIN_ADDRESS:).*" $TMP_INIT_LOG)'#g' $ETHEREUM_CONFIG_FILE_PATH
 
