@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import {Card,CardHeader,CardTitle, CardText,CardActions} from 'material-ui/Card';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import Modal from './Modal';
 
 import QuestionList from './QuestionList';
@@ -9,6 +10,7 @@ import QuestionItemAdministrator from './QuestionItemAdministrator';
 import SubmissionStepper from './SubmissionStepper';
 
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 
 import * as AdministratorActions from '../actions/administratorActions';
 import * as RegistreActions from '../actions/registreActions';
@@ -59,7 +61,7 @@ export class Administrator extends Component {
 
 	}
 
-  listUsersRender = function(){
+  listUsersRender = function(sendCredit){
 		console.log("RENDER Status:",this.props.registre.status);
     if(this.props.registre.status == undefined){
 			return (<li>LOADING</li>);
@@ -68,12 +70,23 @@ export class Administrator extends Component {
 		 		if(this.props.registre.users.length){
 		      var users = this.props.registre.users.map((user) => {
 		        return (
-		          <li>
-		            <div>Mail : {user.mail}</div>
-		            <div>Adress : {user.adress}</div>
-								<div>Solde : {user.solde}</div>
-		          </li>);
+								<Card id={user.mail}>
+									  <CardHeader  title={user.mail} />
+ 								 	  <CardText>
+							  			<div>Mail : {user.mail}</div>
+		            			<div>Adress : {user.adress}</div>
+											<div>Solde : {user.solde}</div>
+											<FlatButton
+												label="Créditer le compte"
+												icon={<ContentAdd />}
+												onClick={()=>sendCredit(user)}
+												/>
+										</CardText>
+								</Card>
+
+						);
 		      });
+
 		      return (<ul>{users}</ul>);
 		    }else{
 					return (<li> Aucun utilisateur enregistré sur le questionnaire !</li>)
@@ -83,12 +96,12 @@ export class Administrator extends Component {
   }
 
   render() {
-  	const {administrator, submit, validSubmit, endValid} = this.props;
+  	const {administrator, submit, validSubmit, sendCredit, endValid} = this.props;
 
     var button = 	(<RaisedButton	secondary={true}
 												style={styles.button}
 												labelStyle={styles.button.label}
-												label="Créditer les comptes enregistrés"
+												label="Créditer tout les comptes enregistrés"
 												onClick={()=>submit(true)} />
                  );
 
@@ -96,7 +109,7 @@ export class Administrator extends Component {
     	<div style={styles.root}>
         <h2>Liste des utilisateurs connectés</h2>
 
-        {this.listUsersRender()}
+        {this.listUsersRender(sendCredit)}
     		{button}
 
 			<Modal onSubmit={()=>{validSubmit(this.props.registre.users)}}/>

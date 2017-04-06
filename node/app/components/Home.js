@@ -7,6 +7,8 @@ import AppBar from 'material-ui/AppBar';
 import Snackbar from 'material-ui/Snackbar';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 import ActionPowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
+import ActionSupervisorAccount from 'material-ui/svg-icons/action/supervisor-account';
+import ActionDonutSmall from 'material-ui/svg-icons/action/donut-small';
 
 import * as HomeActions from '../actions/homeActions'
 
@@ -60,12 +62,20 @@ export class Home extends Component {
             <span style={styles.head}>RHChain</span>
           }
           iconElementRight={
-            <Link to="/">
-              <ActionPowerSettingsNew style={styles.close} color="#967D4D"/>
-            </Link>
+            <div>
+              <Link to="/home/admin">
+                <ActionDonutSmall style={styles.close} color="#967D4D"/>
+              </Link>
+              <Link to="/home/admin/registre">
+                <ActionSupervisorAccount style={styles.close} color="#967D4D"/>
+              </Link>
+              <Link to="/">
+                <ActionPowerSettingsNew style={styles.close} color="#967D4D"/>
+              </Link>
+            </div>
           }
           showMenuIconButton={false}
-          zDepth={2} /> 
+          zDepth={2} />
 
           {this.props.children}
 

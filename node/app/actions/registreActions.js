@@ -96,7 +96,51 @@ export function validSubmit() {
 		Promise.all(allPromises)
 		.then(()=>{onSuccess();}
 		,(error)=>{onFail(error)});
-
-
   }
+}
+
+export const SEND_CREDIT = 'SEND_CREDIT';
+export function sendCredit(user) {
+
+	  return (dispatch, getState) => {
+
+			console.log("Transfert Argent");
+	  	var state = getState();
+			dispatch({ type : USERS_LOADING});
+
+	    var onSuccess = ()=>{
+				console.log("Envoie d'argent réalisé avec succès.");
+	      stopMiner();
+	      dispatch( cancel());
+	      dispatch( showInfo("Vous avez alimenter le compte.", INFO_TYPES.SUCCESS) );
+
+				// Rechargement de la liste des utilisateurs
+				dispatch( usersLoading());
+	    };
+
+			var onFail = (message)=>{
+					console.log("Envoie d'argent en erreur",message);
+	       stopMiner();
+	       dispatch( cancel() );
+	       dispatch( showInfo(message, INFO_TYPES.ERROR) );
+	    };
+
+	    startMiner();
+			var promise = new Promise((resolve) =>
+			{
+					console.log("Sending : sendMoneyFromCoinBase");
+					console.log("TO : ",user.adress);
+					sendMoneyFromCoinBase(user.adress,
+						()=>{ resolve();}
+					 ,()=>{ reject();}
+					);
+			});
+
+			promise.then(
+				()=>onSuccess(),
+				(error)=>onFail(error)
+			);
+
+
+	  }
 }

@@ -1,5 +1,5 @@
 import {VALID_SUBMIT, END_VALID } from '../actions/administratorActions';
-import {USERS_LOADING, USERS_LOADED } from '../actions/registreActions';
+import {USERS_LOADING,SEND_CREDIT, USERS_LOADED } from '../actions/registreActions';
 import { initialRootState } from './homeReducer'
 // jQuery
 
@@ -18,6 +18,11 @@ export default function registre(state = getInitialState(),action){
 
 	switch( action.type ){
 
+		case SEND_CREDIT:
+			console.log("reducer ","send credit");
+			var s = { ...state } ;
+			s.status = "LOADING";
+			return(s)
 		case USERS_LOADING:
 			console.log("reducer ","users loading");
 			var s = { ...state } ;
@@ -31,7 +36,6 @@ export default function registre(state = getInitialState(),action){
 			s.users = action.users;
 
 			return 	s;
-
 		default:
 			return state;
 	}
