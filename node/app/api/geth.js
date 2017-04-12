@@ -286,7 +286,7 @@ export function sendMoneyFromCoinBase(destinataire, onSuccess, onFail){
       ()=>{
         // Envoie transactions
         console.log("Envoie de 100 wei from ",coinbase,"to ",destinataire);
-        web3.eth.sendTransaction({from:coinbase,to:destinataire,value:100},
+        web3.eth.sendTransaction({from:coinbase,to:destinataire,value:web3.toWei(0.1,"ether")},
           function(errTx,txHash){
               waitTxMining(txHash, onSuccess, onFail)
           }
