@@ -28,10 +28,9 @@ for( i=0;i<questions.length;i++){
 /* Compile contract */
  // compiled = eth.compile.solidity(sources).RHChain;
 compiled = getContractCompiled();
-console.log("compiled",compiled);
+compiled = "0x"+compiled; 	// Add 0x to compiled code with solc to put into a transaction
 
-abi			 = getContractAbi();
-console.log("abi",abi);
+abi	= getContractAbi();
 
 /* Unlock account for deployment */
 personal.unlockAccount(eth.coinbase,ADMIN_PASSWORD);
