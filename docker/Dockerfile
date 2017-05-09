@@ -49,19 +49,17 @@ RUN apt-get update 																	&& \
 	solc --bin -o $GETH_DATA_PATH/tmp contract.sol 									&& \
 	solc --abi -o $GETH_DATA_PATH/tmp contract.sol 									&& \
 	cd / 																			&& \
-	sed -i -e "s/CONTRACT_SOURCE_ABI/$(cat $GETH_DATA_PATH/tmp/RHChain.abi)/" $CONTRACT_JS && \
-	sed -i -e "s/CONTRACT_SOURCE_BIN/0x$(sed 's:/:\\/:g' $GETH_DATA_PATH/tmp/RHChain.bin)/" $CONTRACT_JS && \
-	geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID --nodiscover --ipcdisable init $GETH_DATA_PATH/genesis.json && \
-	mkdir /root/.ethash 															&& \
-	geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID makedag 0 /root/.ethash	&& \
-	geth --datadir $GETH_DATA_PATH --networkid $NETWORK_ID --jspath $GETH_DATA_PATH --nodiscover --ipcdisable js $GETH_DATA_PATH/initialization.js > $TMP_INIT_LOG && \
-	npm install --prefix $NODE_DATA_PATH 											&& \
+	sed -i -e "s/CONTRACT_SOURCE_ABI/$(cat $GETH_DATA_PATH/tmp/RHChain.abi)/" $CONTRACT_JS 					&& \
+	sed -i -e "s/CONTRACT_SOURCE_BIN/0x$(sed 's:/:\\/:g' $GETH_DATA_PATH/tmp/RHChain.bin)/" $CONTRACT_JS 	&& \
+	geth --datadir $GETH_DATA_PATH --nodiscover --ipcdisable init $GETH_DATA_PATH/genesis.json 				&& \
+	geth --datadir $GETH_DATA_PATH --jspath $GETH_DATA_PATH --nodiscover --ipcdisable js $GETH_DATA_PATH/initialization.js > $TMP_INIT_LOG && \
 	sed -i -- 's#"CONTRACT_ABI"#'$( cat $GETH_DATA_PATH/tmp/RHChain.abi)'#g' $ETHEREUM_CONFIG_FILE_PATH && \
 	sed -i -- 's#CONTRACT_ADDRESS#'$(grep -oP "(?<=CONTRACT_ADDRESS:).*" $TMP_INIT_LOG)'#g' $ETHEREUM_CONFIG_FILE_PATH && \
 	sed -i -- 's#ACCOUNT_ADDRESS#'$(grep -oP "(?<=ADMIN_ADDRESS:).*" $TMP_INIT_LOG)'#g' $ETHEREUM_CONFIG_FILE_PATH && \
 	echo "[\""$(grep -oP "(?<=ENODE:).*" $TMP_INIT_LOG)"\"]" > $GETH_STATIC_NODE_FILE_PATH && \
 	rm $TMP_INIT_LOG $CONTRACT_JS $CONTRACT_SOURCES 								&& \
-  	chmod +x $ROOT/startup.sh
+  	chmod +x $ROOT/startup.sh														&& \
+	npm install --prefix $NODE_DATA_PATH 											
 
 EXPOSE $GETH_PORT
 EXPOSE $NODE_PORT
