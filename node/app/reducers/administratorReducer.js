@@ -1,4 +1,4 @@
-import { SET_VISIBILITY, VALID_SUBMIT, END_VALID } from '../actions/administratorActions';
+import { SET_VISIBILITY, END_VALID } from '../actions/administratorActions';
 import { initialRootState } from './homeReducer'
 
 const initialState = {

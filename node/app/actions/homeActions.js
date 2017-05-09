@@ -1,5 +1,5 @@
 
-import {getVoteState,mineOneBlock,checkBalance,stopMiner} from '../api/geth';
+import {getVoteState,getState,mineOneBlock,checkBalance,stopMiner} from '../api/geth';
 
 
 export function initState(){
@@ -15,6 +15,10 @@ export function initState(){
     }
 
     getVoteState(onSuccess,onFail);
+
+    getState((state)=>{
+      dispatch(updateState(state))
+    },onFail);
   }
 }
 
@@ -125,6 +129,14 @@ export function hasMoney(money){
     type: HAS_MONEY,
     payload: {hasMoney: money}
   } 
+}
+
+export const STATE_UPDATED = 'STATE_UPDATED';
+export function updateState(state){
+  return{
+    type: STATE_UPDATED,
+    payload: {newState:state}
+  }
 }
 
 export function checkPositiveBalance(){

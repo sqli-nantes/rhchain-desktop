@@ -1,21 +1,41 @@
-import { load, cancel, showInfo, INFO_TYPES, setOver, receiveNewResults } from './homeActions'
+import {  load, 
+          cancel, 
+          showInfo, 
+          INFO_TYPES, 
+          setOver, 
+          receiveNewResults, 
+          updateState } from './homeActions'
 
-import { closeVote, getAdminVisibilities, getAdminResults, adminEventSubscription, startMiner, stopMiner } from '../api/geth'
+import {  publishVote, 
+          getAdminVisibilities, 
+          getAdminResults, 
+          adminNewResultsSubscription, 
+          adminOpenedSubscription,
+          adminClosedSubscription,
+          startMiner, 
+          stopMiner, 
+          close, 
+          open } from '../api/geth'
 
 
 export function subscribeAdminEvents(){
   return (dispatch)=>{
 
-    var onSuccess = (results)=>{
-      dispatch(receiveNewResults(results)); 
-      dispatch(showInfo("Nouvelle réponse au sondage",INFO_TYPES.SUCCESS));
-    }
-
     var onFail = (error)=>{
       dispatch(showInfo(error,INFO_TYPES.ERROR));
     }
 
-    adminEventSubscription(onSuccess,onFail);
+    adminNewResultsSubscription((results)=>{
+      dispatch(receiveNewResults(results)); 
+      dispatch(showInfo("Nouvelle réponse au sondage",INFO_TYPES.SUCCESS));
+    },onFail);
+    adminOpenedSubscription(()=>{
+      dispatch(updateState(0))
+    },onFail);
+    adminClosedSubscription(()=>{
+      dispatch(updateState(2))
+    },onFail);
+
   }
 }
 
@@ -56,8 +76,6 @@ export function setVisibility(idQuestion,visible) {
   };
 }
 
-export const VALID_SUBMIT = 'VALID_SUBMIT';
-
 export function validSubmit() {
   return (dispatch,getState) => {
 
@@ -71,7 +89,8 @@ export function validSubmit() {
       stopMiner();
       dispatch( cancel() );
       dispatch( setOver(true) );
-      dispatch( showInfo("Vous venez de terminer le vote",INFO_TYPES.SUCCESS) );
+      dispatch( updateState(1));
+      dispatch( showInfo("Vous venez de publier les résultats",INFO_TYPES.SUCCESS) );
     };
 
     var onFail = (message)=>{
@@ -81,8 +100,55 @@ export function validSubmit() {
     };
 
     startMiner();
-    closeVote(visibilities,onSuccess,onFail);
+    publishVote(visibilities,onSuccess,onFail);
 
   };
 }
 
+export function clickCloseSurvey(){
+  return (dispatch) => {
+
+    dispatch(load(true))
+
+    var onSuccess = ()=>{
+      stopMiner();
+      dispatch( cancel() );
+      dispatch( showInfo("Vous venez de fermer le vote",INFO_TYPES.SUCCESS) );
+    };
+
+    var onFail = (message)=>{
+      stopMiner();
+      dispatch( cancel() );
+      dispatch( setOver(true) );
+      dispatch( showInfo(message,INFO_TYPES.ERROR) );
+    };
+
+    startMiner();
+    close(onSuccess,onFail);
+
+  }
+}
+
+export function clickOpenSurvey(){
+  return (dispatch) => {
+
+    dispatch(load(true))
+
+    var onSuccess = ()=>{
+      stopMiner();
+      dispatch( cancel() );
+      dispatch( setOver(false) );
+      dispatch( showInfo("Vous venez d'ouvrir le vote",INFO_TYPES.SUCCESS) );
+    };
+
+    var onFail = (message)=>{
+      stopMiner();
+      dispatch( cancel() );
+      dispatch( showInfo(message,INFO_TYPES.ERROR) );
+    };
+
+    startMiner();
+    open(onSuccess,onFail);
+
+  }
+}

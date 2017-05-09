@@ -5,7 +5,8 @@ import { 	SUBMIT, LOAD, CANCEL,
 			SHOW_RESULTS,
 			SHOW_INFO, HIDE_INFO,
 			SET_OVER,
-			HAS_MONEY } from '../actions/homeActions';
+			HAS_MONEY,
+			STATE_UPDATED } from '../actions/homeActions';
 
 export const initialRootState = {
 	answersLabel: [
@@ -46,6 +47,7 @@ export const initialRootState = {
 		message: "",
 		color: ""
 	},
+	state: 0,
 	over: false,
 	hasSubmitted: false,
 	loading: false,
@@ -93,6 +95,8 @@ export default function app(state = initialRootState,action){
 		case SET_OVER:
 			return Object.assign({},state,{over: action.payload.over});
 
+		case STATE_UPDATED:
+			return Object.assign({},state,{state:action.payload.newState});
 
 		default:
 			return state;

@@ -21,7 +21,6 @@ const styles = {
 
 	button: {
 		position: "absolute",
-		bottom: "2vh",
 		width: "50vw",
 		margin: "0 25vw",
 		label:{
@@ -41,23 +40,54 @@ export class Administrator extends Component {
 	}
 
   render() {
-  	const {home, administrator, submit, validSubmit, endValid} = this.props;
+  	const {home, administrator, submit, validSubmit, endValid, clickCloseSurvey,clickOpenSurvey} = this.props;
 
-  	var button = home.over ? null :
-							  	(<RaisedButton	secondary={true} 
-												style={styles.button}
-												labelStyle={styles.button.label}
-												label="Valider et publier"
-												disabled={!home.hasMoney} 
-												onClick={()=>submit(true)} />);
+		var buttonLabel;
+		var buttonOnClick;
+		var buttonCSS = styles.button;
+		var questionList = (
+    		<QuestionList>
+    			<QuestionItemAdministrator />
+				</QuestionList>);
+
+
+		switch(home.state){
+			case 0:
+				buttonLabel = "Publier";
+				buttonOnClick = ()=>submit(true);
+				buttonCSS.bottom = "2vh";
+				buttonCSS.top = undefined;
+				break;
+			case 1:
+				buttonLabel = "Fermer";
+				buttonOnClick = ()=>clickCloseSurvey();
+				buttonCSS.bottom = "2vh";
+				buttonCSS.top = undefined;
+				break;
+			case 2:
+				buttonLabel = "Ouvrir";
+				buttonOnClick = ()=>clickOpenSurvey();
+				questionList = null;
+				buttonCSS.top = "50vh";
+				buttonCSS.bottom = undefined;
+				break;
+			default:
+				console.log("DEFAULT");
+				break;
+
+		}
+
     return (
     	<div style={styles.root}>
     	
-    		<QuestionList>
-    			<QuestionItemAdministrator />
-    		</QuestionList>
+    		{questionList}
 
-    		{button}
+    		<RaisedButton	secondary={true} 
+												style={buttonCSS}
+												labelStyle={styles.button.label}
+												label={buttonLabel}
+												disabled={!home.hasMoney} 
+												onClick={buttonOnClick} />
 
 			<Modal onSubmit={()=>{validSubmit()}}/>
 		</div>
