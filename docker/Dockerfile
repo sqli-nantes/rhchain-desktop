@@ -22,7 +22,10 @@ ENV TMP_INIT_LOG $GETH_DATA_PATH/init.tmp.log
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV GETH_PORT 30303
+ENV BOOTNODE_TCP_PORT 30301
+ENV BOOTNODE_UDP_PORT 30302 
+ENV GETH_TCP_PORT 30303
+ENV GETH_UDP_PORT 30304
 ENV NETWORK_ID 100
 ENV RPC_ADDRESS 0.0.0.0
 ENV RPC_PORT 3001
@@ -42,7 +45,9 @@ RUN apt-get update 																	&& \
 	apt-get install -y --no-install-recommends software-properties-common 			&& \
 	add-apt-repository -y ppa:ethereum/ethereum 									&& \
 	apt-get update 																	&& \
-	apt-get install -y --no-install-recommends geth solc jq 						&& \
+	apt-get install -y --no-install-recommends geth bootnode solc jq 				&& \
+	bootnode --genkey=$GETH_DATA_PATH/boot.key										&& \
+	bootnode -nodekey $GETH_DATA_PATH/boot.key -writeaddress > $GETH_DATA_PATH/pub.key 						&& \			
 	mkdir $GETH_DATA_PATH/tmp 														&& \
 	#cd en attente de bug fix solc
 	cd  $GETH_DATA_PATH 															&& \
@@ -61,9 +66,17 @@ RUN apt-get update 																	&& \
   	chmod +x $ROOT/startup.sh														&& \
 	npm install --prefix $NODE_DATA_PATH 											
 
-EXPOSE $GETH_PORT
+EXPOSE $GETH_TCP_PORT
+EXPOSE $GETH_UDP_PORT
 EXPOSE $NODE_PORT
 EXPOSE $NODE_BACK_PORT
 EXPOSE $RPC_PORT
+EXPOSE $BOOTNODE_TCP_PORT
+EXPOSE $BOOTNODE_UDP_PORT
 
-CMD $ROOT/startup.sh $BOOTNODE $GETH_DATA_PATH $GETH_PORT $NODE_DATA_PATH $GETH_STATIC_NODE_FILE_PATH $NETWORK_ID $RPC_ADDRESS $RPC_PORT $GETH_STATIC_NODE_FILE_PATH
+
+RUN echo "###############" && \
+	echo "BOOTNODE : "$(cat $GETH_DATA_PATH/pub.key) && \
+	echo "CONTRACT : "$(cat $ETHEREUM_CONFIG_FILE_PATH)
+
+CMD $ROOT/startup.sh $GETH_DATA_PATH $GETH_TCP_PORT $NODE_DATA_PATH $GETH_STATIC_NODE_FILE_PATH $NETWORK_ID $RPC_ADDRESS $RPC_PORT $GETH_STATIC_NODE_FILE_PATH $BOOTNODE_TCP_PORT $BOOTNODE_UDP_PORT
