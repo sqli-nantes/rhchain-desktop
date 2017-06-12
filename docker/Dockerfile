@@ -45,9 +45,7 @@ RUN apt-get update 																	&& \
 	apt-get install -y --no-install-recommends software-properties-common 			&& \
 	add-apt-repository -y ppa:ethereum/ethereum 									&& \
 	apt-get update 																	&& \
-	apt-get install -y --no-install-recommends geth bootnode solc jq 				&& \
-	bootnode --genkey=$GETH_DATA_PATH/boot.key										&& \
-	bootnode -nodekey $GETH_DATA_PATH/boot.key -writeaddress > $GETH_DATA_PATH/pub.key 						&& \			
+	apt-get install -y --no-install-recommends geth solc jq 				&& \			
 	mkdir $GETH_DATA_PATH/tmp 														&& \
 	#cd en attente de bug fix solc
 	cd  $GETH_DATA_PATH 															&& \
@@ -61,7 +59,7 @@ RUN apt-get update 																	&& \
 	sed -i -- 's#"CONTRACT_ABI"#'$( cat $GETH_DATA_PATH/tmp/RHChain.abi)'#g' $ETHEREUM_CONFIG_FILE_PATH && \
 	sed -i -- 's#CONTRACT_ADDRESS#'$(grep -oP "(?<=CONTRACT_ADDRESS:).*" $TMP_INIT_LOG)'#g' $ETHEREUM_CONFIG_FILE_PATH && \
 	sed -i -- 's#ACCOUNT_ADDRESS#'$(grep -oP "(?<=ADMIN_ADDRESS:).*" $TMP_INIT_LOG)'#g' $ETHEREUM_CONFIG_FILE_PATH && \
-	echo "[\""$(grep -oP "(?<=ENODE:).*" $TMP_INIT_LOG)"\"]" > $GETH_STATIC_NODE_FILE_PATH && \
+	echo "[\""$(grep -oP "(?<=ENODE:).*" $TMP_INIT_LOG)"\"]" && \
 	rm $TMP_INIT_LOG $CONTRACT_JS $CONTRACT_SOURCES 								&& \
   	chmod +x $ROOT/startup.sh														&& \
 	npm install --prefix $NODE_DATA_PATH 											
@@ -71,12 +69,9 @@ EXPOSE $GETH_UDP_PORT
 EXPOSE $NODE_PORT
 EXPOSE $NODE_BACK_PORT
 EXPOSE $RPC_PORT
-EXPOSE $BOOTNODE_TCP_PORT
-EXPOSE $BOOTNODE_UDP_PORT
 
 
 RUN echo "###############" && \
-	echo "BOOTNODE : "$(cat $GETH_DATA_PATH/pub.key) && \
 	echo "CONTRACT : "$(cat $ETHEREUM_CONFIG_FILE_PATH)
 
-CMD $ROOT/startup.sh $GETH_DATA_PATH $GETH_TCP_PORT $NODE_DATA_PATH $GETH_STATIC_NODE_FILE_PATH $NETWORK_ID $RPC_ADDRESS $RPC_PORT $GETH_STATIC_NODE_FILE_PATH $BOOTNODE_TCP_PORT $BOOTNODE_UDP_PORT
+CMD $ROOT/startup.sh
