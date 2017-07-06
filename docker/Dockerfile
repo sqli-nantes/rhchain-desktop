@@ -31,7 +31,6 @@ ENV RPC_ADDRESS 0.0.0.0
 ENV RPC_PORT 3001
 ENV NODE_PORT 3000
 ENV NODE_BACK_PORT 8000
-ENV ETHEREUM_NETWOR_ID 100
 
 COPY docker/startup.sh $ROOT
 COPY geth/contract.js geth/contract.sol geth/genesis.json geth/initialization.js geth/mine.js $GETH_DATA_PATH/
@@ -45,7 +44,7 @@ RUN apt-get update 																	&& \
 	apt-get install -y --no-install-recommends software-properties-common 			&& \
 	add-apt-repository -y ppa:ethereum/ethereum 									&& \
 	apt-get update 																	&& \
-	apt-get install -y --no-install-recommends geth solc jq 				&& \			
+	apt-get install -y --no-install-recommends geth solc 							&& \			
 	mkdir $GETH_DATA_PATH/tmp 														&& \
 	#cd en attente de bug fix solc
 	cd  $GETH_DATA_PATH 															&& \

@@ -99,7 +99,7 @@ contract RHChain {
     }
     
     function mySubmission() onlyCollab notClosed returns(bool,uint8[3]) {
-        if( !hasSubmitted[msg.sender] ) throw;
+        if( !hasSubmitted[msg.sender] ) return (false,submissions[msg.sender]);
         else return (true,submissions[msg.sender]);
     }
     

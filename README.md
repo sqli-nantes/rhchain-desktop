@@ -59,7 +59,6 @@ Then :
 docker inspect CONTAINER_ID | grep IPAddress
 ```
 
-
 ## DEMO
 
 1. Download image 
@@ -113,3 +112,6 @@ docker inspect CONTAINER_ID | grep IPAddress
 15. **[ MOBILE AND DESKTOP-COLLAB ]** See the results
 
 
+# Run without docker (command line)
+
+See [cmd README.md](https://github.com/sqli-nantes/rhchain-desktop/cmd/README.md)
