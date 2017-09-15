@@ -15,7 +15,7 @@ npm start --prefix $NODE_DATA_PATH &
 npm run server --prefix $NODE_DATA_PATH -- --port $NODE_BACK_PORT &
 
 
-geth 	--datadir $GETH_DATA_PATH \
+$GETH 	--datadir $GETH_DATA_PATH \
 		--networkid $NETWORK_ID \
 		--port $GETH_TCP_PORT \
 		--ipcdisable \
@@ -28,6 +28,7 @@ geth 	--datadir $GETH_DATA_PATH \
 		--v5disc \
 		--lightserv 90 \
 		--bootnodes=$BOOTNODE \
+		--vmdebug \
 		console
 
 
