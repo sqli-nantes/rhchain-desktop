@@ -2,14 +2,14 @@ pragma solidity ^0.4.9;
 
 contract RHChain {
 
-    address private admin;
-    bool[3] private visibilities; /* [q1.visibile,q2.visibile,q3.visibile] */
-    address[] private submitters;
+    address public admin;
+    bool[3] public visibilities; /* [q1.visibile,q2.visibile,q3.visibile] */
+    address[] public submitters;
     
-    mapping( address => bool ) private hasSubmitted;
-    mapping( address =>  uint8[3] ) private submissions; /* @ --> [idx q1.answer,idx q2.answer, idx q3.answer] */
+    mapping( address => bool ) public hasSubmitted;
+    mapping( address =>  uint8[3] ) public submissions; /* @ --> [idx q1.answer,idx q2.answer, idx q3.answer] */
     
-    int[3][3] private results; /* [nb vote q1.answer1, nb vote q1.answer2, nb vote q1.answer3 ][...] */
+    int[3][3] public results; /* [nb vote q1.answer1, nb vote q1.answer2, nb vote q1.answer3 ][...] */
     
     /*  State of the survey
         0 : Opened 
@@ -23,37 +23,37 @@ contract RHChain {
     bytes32[3] public questions; /* questions hash */
     bytes32[3] public answers; /* answers hash */
     
-    event newResults(int[3][3] results);
-    event published(int[3][3] results); /* returns results with visibility. -1 is : not visible */
+    event newResults(int[3][3]);
+    event published(int[3][3]); /* returns results with visibility. -1 is : not visible */
     event closed();
     event opened();
 
     modifier onlyAdmin {
-        if( msg.sender != admin ) throw;
+        if( msg.sender != admin ) revert();
         _;
     }
     modifier onlyCollab{
-        if( msg.sender == admin ) throw;
+        if( msg.sender == admin ) revert();
         _;
     }
     modifier onlyNoSubmission() {
-       if( hasSubmitted[msg.sender] ) throw;
+       if( hasSubmitted[msg.sender] ) revert();
        _;
     }
     modifier onlyOpened {
-        if( state != SurveyState.Opened ) throw;
+        if( state != SurveyState.Opened ) revert();
         _;
     }
     modifier onlyClosed {
-        if( state != SurveyState.Closed ) throw;
+        if( state != SurveyState.Closed ) revert();
         _;
     }
     modifier notClosed{
-        if( state == SurveyState.Closed ) throw;
+        if( state == SurveyState.Closed ) revert();
         _;
     }
     modifier onlyPublished {
-        if( state != SurveyState.Published ) throw;
+        if( state != SurveyState.Published ) revert();
         _;
     }
     
@@ -64,9 +64,9 @@ contract RHChain {
         state = defaultState;
     }
     
+    //function submit(uint8[3] answ) onlyCollab onlyOpened onlyNoSubmission returns(bool){
     function submit(uint8[3] answ) onlyCollab onlyOpened onlyNoSubmission returns(bool){
-        
-        if( !isSubmissionValid(answ) ) throw;
+        assert( isSubmissionValid(answ) );
         
         submissions[msg.sender] = answ;
         hasSubmitted[msg.sender] = true;
@@ -80,6 +80,7 @@ contract RHChain {
         return true;
     }
     
+    //function publish(bool[3] _visibilities) onlyAdmin onlyOpened returns(bool){
     function publish(bool[3] _visibilities) onlyAdmin onlyOpened returns(bool){
         visibilities = _visibilities;
         state = SurveyState.Published;
@@ -87,28 +88,33 @@ contract RHChain {
         return true;
     }
     
+    //function close() onlyAdmin onlyPublished returns(bool) {$
     function close() onlyAdmin onlyPublished returns(bool) {
         state = SurveyState.Closed;
         cleanState();
         closed();
     }
     
+    //function open() onlyAdmin onlyClosed returns(bool){
     function open() onlyAdmin onlyClosed returns(bool){
         state = SurveyState.Opened;
         opened();
     }
     
+    //function mySubmission() onlyCollab notClosed returns(bool,uint8[3]) {
     function mySubmission() onlyCollab notClosed returns(bool,uint8[3]) {
         if( !hasSubmitted[msg.sender] ) return (false,submissions[msg.sender]);
         else return (true,submissions[msg.sender]);
     }
     
+    //function getResults() notClosed returns(bool, int[3][3] ){
     function getResults() notClosed returns(bool, int[3][3] ){
         if( msg.sender == admin ) return (true,results);
         else if( state == SurveyState.Published ) return (true,resultsWithVisibilityFilter());
-        else throw;
+        else revert();
     }
     
+    //function getVisibilities() onlyAdmin notClosed returns(bool, bool[3] )  {
     function getVisibilities() onlyAdmin notClosed returns(bool, bool[3] )  {
         return (true,visibilities);
     }
