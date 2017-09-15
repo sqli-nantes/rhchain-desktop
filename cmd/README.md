@@ -13,6 +13,8 @@ apt-get install -y --no-install-recommends geth solc jq
 
 ```
 
+*Tested with geth 1.7 and solc 0.4.16*
+
 2. Create binaries folder
 
 ```bash
@@ -29,11 +31,31 @@ cp /usr/bin/jq ./bin
 
 ## Start
 
-```bash
-> ./start.sh "$enode"
-```
+1. Start bootnode 
 
-$enode is bootnode public url (enode://pub_key@ip:port?discport:port+1)
+    A bootnode is available in project [bootnode](https://github.com/sqli-nantes/rhchain-bootnode)
+    Follow the README.md
+
+2. Start desktop-app
+
+    ```bash
+    ./install.sh
+    ./start.sh "$enode"
+    ```
+
+    *$enode* is bootnode public url *
+    ( like *enode://pub_key@ip:port?discport:port+1)*
+    :warning: use ':' after 'discport' and not '=' 
+
+3. Start mobile-app
+
+    [Clone it](https://github.com/sqli-nantes/rhchain-android).
+    
+    Replace these [lines](https://github.com/sqli-nantes/rhchain-android/blob/ethmobile/app/src/main/java/com/sqli/blockchain/rhchain/Constants.java#L22-L25) to fit with the same *enode url* than in previous step.
+
+    Replace this [line](https://github.com/sqli-nantes/rhchain-android/blob/ethmobile/app/src/main/java/com/sqli/blockchain/rhchain/Constants.java#L20) with `contractAddress` field value of file `rhchain-desktop/node/ethereum.json` 
+
+    Run the app.
 
 ## Stop 
 
